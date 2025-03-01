@@ -13,7 +13,7 @@ export function Header(){
     }else if(location == '/pricing'){
         current = 4
     }
-    console.log(current,location)
+    // console.log(current,location)
     
     return (
         <div className="headerContainer">

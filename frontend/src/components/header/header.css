@@ -10,6 +10,8 @@ div.headerContainer{
     grid-template-columns: 10% 35%;
     column-gap: 55%;
     border-bottom: 0.1px solid rgba(0, 0, 0, 0.264);
+    z-index: 2;
+    background-color: white;
 }
 
 div.logoContainer{

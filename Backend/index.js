@@ -1,18 +1,27 @@
 require('dotenv').config();
 const mysql = require('mysql2/promise');
 const express = require('express');
-const app = express();
+
 const bcrypt = require('bcrypt')
 const authenticator = require('./middleware/authenticator')
 const DBconn = require('./connDB/connDB')
 const getAccessToken = require('./jwt/getAccessToken')
 const refreshToken = require('./jwt/refreshToken')
+const deleteRefreshToken = require('./jwt/deleteRefreshToken')
+const http = require("http")
+const WebSocket = require("ws")
 
 
+const app = express();
+const server = http.createServer(app);
+const wss = new WebSocket.Server({server});
 let connection;
+
+let users = [];
 
 app.use(express.json());
 
+//can be an uprotected route
 app.get('/pricing', async (req, res) => {
   let answer = {}
   try{
@@ -29,6 +38,7 @@ app.get('/pricing', async (req, res) => {
   }
 });
 
+// protected route
 app.post('/service',async(req,res)=>{
   console.log('post request recieved',req.query)
   let service = req.body.service;
@@ -45,6 +55,8 @@ app.post('/service',async(req,res)=>{
   }
 })
 
+// all the auth related endpoints must have req.body.role 
+
 app.post('/signup',(req,res)=>{
   let user = req.body.user;
   bcrypt.hash(user.password,10,async function(err,hash){
@@ -52,42 +64,72 @@ app.post('/signup',(req,res)=>{
       return res.status(500).send("There was an error in our server.Please try signing up again")
     }
     try{
-      const [results,fields] = await connection.query("INSERT INTO `customer` (`name`,`phone`,`email`,`password`) VALUES (?,?,?,?)",[user.name,user.phone,user.email,hash])
-      res.status(200).send("User account created successfully");
-      if(results.affectedRows!=1){
-        console.log(results.affectedRows," were affected by the service ",service);  
-      }
+        switch(user.role){
+          case 'customer':{
+            const [results,fields] = await connection.query("INSERT INTO `customer` (`name`,`phone`,`email`,`password`) VALUES (?,?,?,?)",[user.name,user.phone,user.email,hash])
+            res.status(200).send("User account created successfully");
+          }
+          case 'admin':{
+            const [results,fields] = await connection.query("INSERT INTO `admintable` (`name`,`phone`,`password`) VALUES (?,?,?)",[user.name,user.phone,hash])
+            res.status(200).send("Admin account created successfully");
+          }
+        }
     }catch(error){
-      console.log("error in creating user account",user.name,user.email,user.phone,err)
-      res.status(500).send("There was an error in our server.Please try again")
+        console.log("error in creating",user.role,"account",user.name,user?.email,user.phone,err)
+        res.status(500).send("There was an error in our server.Please try again")
     }
   })
 })
 
+
 app.post('/login',authenticator,getAccessToken,(req,res)=>{
   let response = {
     "authData": req.loginData,
-    "userData": req.userProfile
+    "ProfileData": req.Profile
   };
   console.log("user id ",req.userProfile.customer_id)
   res.send(response);
 })
 
-app.get('/refresh',refreshToken,(req,res)=>{
+app.post('/refresh',refreshToken,(req,res)=>{
   let response = {
     "authData": req.refreshData
   }
   res.send(response)
 })
 
-app.get('/logout',deleteRefreshToken,(req,res)=>{
+app.post('/logout',deleteRefreshToken,(req,res)=>{
   res.send('Successfully logged out');
 })
 
+// need to write the update user functionality
+function broadcast(message){
+  users.forEach(userWSObject => {
+    userWSObject.send(message);
+  })
+}
 
-app.listen(3000, async() => {
+wss.on('connection',(ws)=>{
+  console.log("connected user")
+  users.push(ws);
+  ws.send('ready to chat');
+
+  ws.on('message',async(originalmessage)=>{
+    try{
+      let message = originalmessage.toString()
+      console.log('message',message)
+      broadcast(message)
+      await connection.query("INSERT INTO `chat` (`chat_message`,`message_time`,`sender`,`reciever`) VALUES (?,'2025-03-12 00:03:40','customer','admin')",[message]);
+    }catch(err){
+      console.log("When trying to send message.Error occured: ",err)
+    }
+  })
+})
+
+server.listen(3000, async() => {
   console.log('Server is running at port 3000');
   connection =  await DBconn();
 });
+
 
 

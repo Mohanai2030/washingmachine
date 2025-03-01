@@ -1,0 +1,85 @@
+div.chatContainer{
+    display: grid;
+    grid-template-columns: 75% 25%;
+    grid-template-rows: 100%;
+    height: 90svh;
+    width:100%;
+}
+
+div.chatContent{
+    border: 2px solid black;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    height: 100%;
+}
+div.chatContent ul{
+    margin: 0px;
+    padding: 0px;
+}
+
+div.chatContent div.left{
+    align-self: flex-start;
+}
+
+div.chatContent div.right{
+    align-self: flex-end;
+}
+
+div.messageSenderContainer{
+    border: 2px solid black;
+    /* padding: 10px; */
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 60% 10%;
+    grid-template-columns: 100%;
+    /* align-items: center; */
+    box-sizing: border-box;
+}
+
+div.messageSenderInputContainer{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top:10%
+}
+
+div.messageSenderButtonContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button.messageSenderButton{
+    border-radius: 15px;
+    width: 80%;
+    height:60%;
+    background-color: rgb(32, 226, 32);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 500;
+    font-size: 28px;
+    transition: all 0.3s;
+}
+
+button.messageSenderButton:hover{
+    scale: 1.05;
+}
+
+input.messageSenderInput{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 20px;
+    font-weight: 100;
+    text-align: center;
+    width:90%;
+    height:40%;
+    border-radius: 10px;
+}
+
+li{
+    list-style-type: none;
+}

@@ -1,6 +1,11 @@
 div.homeContainer{
+    width:100%;
+}
+
+div.homeFirstPageContainer{
     display: grid;
     width: 100%;
+    height:90vh;
     grid-template-columns: 60% 40%;
     justify-items: center;
     align-items: center;
@@ -100,5 +105,109 @@ h1{
 
 div.topicFirstLine{
     display: flex;
+}
+
+div.servicesPageContainer{
+    display: grid;
+    grid-template-rows: 15% 85%;
+    /* flex-direction: column; */
+    height: 100svh;
+    background-image: linear-gradient(-135deg,rgba(180, 212, 223, 0.886) 10%,white 80%,rgba(180, 212, 223, 0.886));
+    align-items:center;
+    justify-items:center ;
+}
+
+div.servicesBodyContainer{
+    width: 90%;
+    display: grid;
+    grid-template-columns: repeat(3,24%);
+    grid-template-rows: 100%;
+    justify-content: space-around;
+    align-self: flex-start;
+}
+
+
+div.serviceContainer img{
+    border-radius: 10px;
+
+}
+
+div.serviceContainer{
+    /* border: 2px solid black; */
+    border-radius: 10px;
+    padding: 5px 10px;
+    padding-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: larger;
+    letter-spacing: 0.4px;
+    grid-row: 1;
+    transition: all 1s;
+}
+
+div.serviceContainer:hover{
+    background-color: black;
+    scale: 1.05;
+    color: white;
+}
+
+div.serviceContainer:hover img{
+    align-self: center;
+}
+div.serviceContainer img{
+    align-self: center;
+}
+
+
+div.chooseUsPageContainer{
+    background:url(../../../public/images/ChooseUsBackground.jpg);
+    height:90svh;
+    width:100%;
+    display: grid;
+    justify-content: center;
+    grid-template-rows: 20% 80%;
+}
+div.chooseUsPageContainer:before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0); 
+}
+
+div.chooseUsPageContainer div{
+    color: white;
+}
+div.chooseUsHeadingContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    word-spacing: 10px;
+}
+
+div.chooseUsReasonContainer{
+    display: grid;
+    grid-template-columns: 7.5% 25% 7.5% 25% 7.5% 25% 7.5%;
+    align-items: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: larger;
+}
+
+div.chooseUsReasonHeadingText{
+    font-size: larger;
+    
+}
+
+div.chooseUsReasonContainer div:nth-child(1){
+    grid-column: 2;
+}
+div.chooseUsReasonContainer div:nth-child(2){
+    grid-column: 4;
+}
+div.chooseUsReasonContainer div:nth-child(3){
+    grid-column: 6;
 }
 

@@ -7,17 +7,37 @@ const refreshToken = async(req,res,next)=>{
     }
     const refreshToken = req.cookies?.jwt
     jwt.verify(refreshToken,process.env.REFRESH_TOKEN_KEY,function(err,result){
-        const accessToken = jwt.sign(
-            {
-                "name":decoded.name,
-                "roles":[1000]
-            },
-            process.env.ACCESS_TOKEN_KEY,
-            {expiresIn: '3600s'}
-        )
-        let message = {
-            "accessToken":accessToken,
-            "roles":[1000]
+        let message;
+        switch(req.body.role){
+            case 'customer':{
+                const accessToken = jwt.sign(
+                    {
+                        "name":decoded.name,
+                        "roles":'customer'
+                    },
+                    process.env.ACCESS_TOKEN_KEY,
+                    {expiresIn: '3600s'}
+                )
+
+                message = {
+                    "accessToken":accessToken,
+                    "roles":'customer'
+                }
+            }case 'admin':{
+                const accessToken = jwt.sign(
+                    {
+                        "name":decoded.name,
+                        "roles":'admin'
+                    },
+                    process.env.ACCESS_TOKEN_KEY,
+                    {expiresIn: '3600s'}
+                )
+
+                message = {
+                    "accessToken":accessToken,
+                    "roles":'admin'
+                }
+            }
         }
         req.refreshData = message;
         next() 

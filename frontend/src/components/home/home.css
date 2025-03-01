@@ -1,0 +1,104 @@
+div.homeContainer{
+    display: grid;
+    width: 100%;
+    grid-template-columns: 60% 40%;
+    justify-items: center;
+    align-items: center;
+}
+
+div.homeTextContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+span.animateServiceContainer{
+    display: inline-block;
+    min-width: 308px;
+    height: 48px;
+    overflow: hidden;
+    position: relative;
+}
+
+
+div.animateService.before{
+    position: relative;
+    top:100%;
+    width: fit-content;
+    transition: all 1s;
+    animation-name: text-over;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes text-over{
+    0%{
+        top:100%
+    }
+    20%{
+        top:0%
+    }
+    100%{
+        top:0%
+    }
+}
+
+
+
+
+div.homeImageContainer{
+    display: grid;
+    grid-template-columns: 50px 500px;
+    grid-template-rows: 30px 300px;
+}
+
+div.homeImageTagContainer{
+    z-index: 1;
+    grid-row: 2;
+}
+
+div.homeImageTagContainer img{
+    border-radius: 10%;
+}
+
+div.homePicBackgroundLayer{
+    background-color: lightblue;
+    height: 300px;
+    width: 500px;
+    grid-row: 1;
+    grid-column: 2;
+    border-radius: 10%;
+}
+
+button.homeContactButton{
+    background-color: lightblue;
+    border-radius: 10px;
+    padding:10px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    border: 2px solid black;
+    font-size: 28px;
+    transition: all 0.3s;
+    font-weight: 550;
+}
+
+button.homeContactButton:hover{
+    scale: 1.1;
+    
+}
+
+h1,h3{
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+h1{
+    font-size: 40px;
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+    display: flex;
+    flex-direction: column;
+}
+
+div.topicFirstLine{
+    display: flex;
+}
+

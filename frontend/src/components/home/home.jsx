@@ -1,27 +1,24 @@
 import { useEffect, useRef, useState } from 'react'
 import './home.css'
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 
 export function Home(){
     const services = ['Dry wash','Normal washing','Ironing'];
     let [current,setCurrent] = useState(0);
-    let animateRef = useRef({})
+    let animateRef = useRef({});
+    let navigate = useNavigate()    
 
+    // useEffect(()=>{
+    //     let holdIntervalId = setInterval(()=>{
+    //         setCurrent(current => (current+1)%3);
+    //         animateRef.current.classList.add('before')
+    //     },5000)
 
-    async function wait(time){
-        return Promise((resolve,reject)=>{setTimeout(()=>{resolve()},time)})
-    }
-
-    useEffect(()=>{
-        let holdIntervalId = setInterval(()=>{
-            setCurrent(current => (current+1)%3);
-            animateRef.current.classList.add('before')
-        },5000)
-
-        return ()=>{
-            clearInterval(holdIntervalId);
-        }
-    })
+    //     return ()=>{
+    //         clearInterval(holdIntervalId);
+    //     }
+    // })
 
     return(
         <div className='homeContainer'>
@@ -48,11 +45,14 @@ export function Home(){
                             Your clothes handled with care
                         </h3>
                     </div>
-                    <div>
-                        <button className='homeContactButton'>
-                            Sign up for 25% discount
-                        </button>
-                    </div>
+                    <Link to='./login'>
+                        <div>
+                            <button className='homeContactButton' >
+                                Sign up for 25% discount
+                            </button>
+                        </div>
+                    </Link>
+                    
                 </div>
                 <div className='homeImageContainer'>
                     <div className='homeImageTagContainer'>

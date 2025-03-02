@@ -3,6 +3,7 @@ import { Link,useLocation } from 'react-router-dom'
 
 export function Header(){
     const location = useLocation().pathname;
+    const auth = 'ad'
     let current = 0;
     if(location=='/'){
         current = 1
@@ -12,6 +13,10 @@ export function Header(){
         current = 3
     }else if(location == '/pricing'){
         current = 4
+    }else if(location == '/profile'){
+        current = 5
+    }else if(location == '/billing'){
+        current = 6
     }
     // console.log(current,location)
     
@@ -40,11 +45,18 @@ export function Header(){
                         </div>
                     </Link>
                     
-                    <Link to='/about'>
-                        <div className={current==2?'currentPage':''}>
-                            About
+
+                    <Link to='/profile'>
+                        <div className={current==5?'currentPage':''}>
+                            Profile
                         </div>
                     </Link>
+
+                    {auth=='admin'?<Link to='/billing'>
+                        <div className={current==6?'currentPage':''}>
+                            Billing
+                        </div>
+                    </Link>:""}
     
                 </nav>
             </div>

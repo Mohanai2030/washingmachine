@@ -28,12 +28,12 @@ span.animateServiceContainer{
 
 div.animateService.before{
     position: relative;
-    top:100%;
+    top:0%;
     width: fit-content;
     transition: all 1s;
-    animation-name: text-over;
+    /* animation-name: text-over;
     animation-duration: 5s;
-    animation-iteration-count: infinite;
+    animation-iteration-count: infinite; */
 }
 
 @keyframes text-over{
@@ -146,11 +146,11 @@ div.serviceContainer{
     transition: all 1s;
 }
 
-div.serviceContainer:hover{
+/* div.serviceContainer:hover{
     background-color: black;
     scale: 1.05;
     color: white;
-}
+} */
 
 div.serviceContainer:hover img{
     align-self: center;

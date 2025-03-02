@@ -1,13 +1,14 @@
 require('dotenv').config();
 const mysql = require('mysql2/promise');
 const express = require('express');
-
+const cors = require('cors')
 const bcrypt = require('bcrypt')
 const authenticator = require('./middleware/authenticator')
 const DBconn = require('./connDB/connDB')
 const getAccessToken = require('./jwt/getAccessToken')
 const refreshToken = require('./jwt/refreshToken')
 const deleteRefreshToken = require('./jwt/deleteRefreshToken')
+const signupValidator = require('./middleware/signupvalidator')
 const http = require("http")
 const WebSocket = require("ws")
 
@@ -18,8 +19,13 @@ const wss = new WebSocket.Server({server});
 let connection;
 
 let users = [];
-
+// app.use((req,res)=>{
+//   console.log(req);
+// })
 app.use(express.json());
+app.use(cors({
+  origin: 'http://localhost:5173'
+}))
 
 //can be an uprotected route
 app.get('/pricing', async (req, res) => {
@@ -57,8 +63,9 @@ app.post('/service',async(req,res)=>{
 
 // all the auth related endpoints must have req.body.role 
 
-app.post('/signup',(req,res)=>{
-  let user = req.body.user;
+app.post('/signup',signupValidator,(req,res)=>{
+  console.log("signup requested");
+  let user = req.body;
   bcrypt.hash(user.password,10,async function(err,hash){
     if(err){
       return res.status(500).send("There was an error in our server.Please try signing up again")
@@ -70,7 +77,7 @@ app.post('/signup',(req,res)=>{
             res.status(200).send("User account created successfully");
           }
           case 'admin':{
-            const [results,fields] = await connection.query("INSERT INTO `admintable` (`name`,`phone`,`password`) VALUES (?,?,?)",[user.name,user.phone,hash])
+            const [results,fields] = await connection.query("INSERT INTO `admintable` (`name`,`phone`,`password`,`email`) VALUES (?,?,?)",[user.name,user.phone,hash,user.email])
             res.status(200).send("Admin account created successfully");
           }
         }

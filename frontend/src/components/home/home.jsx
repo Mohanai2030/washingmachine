@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import './home.css'
 import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Review } from './Review/Review';
 
 
 export function Home(){
@@ -9,16 +10,16 @@ export function Home(){
     let animateRef = useRef({});
     let navigate = useNavigate()    
 
-    // useEffect(()=>{
-    //     let holdIntervalId = setInterval(()=>{
-    //         setCurrent(current => (current+1)%3);
-    //         animateRef.current.classList.add('before')
-    //     },5000)
+    useEffect(()=>{
+        let holdIntervalId = setInterval(()=>{
+            setCurrent(current => (current+1)%3);
+            animateRef.current.classList.add('before')
+        },5000)
 
-    //     return ()=>{
-    //         clearInterval(holdIntervalId);
-    //     }
-    // })
+        return ()=>{
+            clearInterval(holdIntervalId);
+        }
+    })
 
     return(
         <div className='homeContainer'>
@@ -132,6 +133,8 @@ export function Home(){
                     </div>
                 </div>
             </div>
+
+            <Review/>
         </div>  
     )
 }

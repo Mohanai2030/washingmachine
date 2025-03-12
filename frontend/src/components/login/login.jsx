@@ -1,12 +1,17 @@
 import { useState } from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import './login.css'
 import axios from 'axios'
+import useAuth from '../../wrappers/AuthContext/useAuth'
+import  useProfile  from '../../wrappers/profilecontext/useProfile'
 
 export default function Login(){
     const [username,setUsername] = useState()
     const [password,setPassword] = useState()
     const [role,setRole] = useState('customer')
+    const {auth,setAuth} = useAuth();
+    const {profile,setProfile} = useProfile();
+    const navigate = useNavigate();
 
     function handleSubmit(){
         let requestBody = {
@@ -14,6 +19,9 @@ export default function Login(){
             'name':username,
             'password':password
         }
+        axios.post('/api/login',requestBody)
+        .then(res => {console.log(res);setAuth(res.data.authData);setProfile(res.data.profileData);navigate('/')})
+        .catch(err => console.log(err))
     }
 
     return(
@@ -55,7 +63,7 @@ export default function Login(){
 
                 <div className='loginFooter'>
                     <div>
-                        <button className='loginSubmitButton'>
+                        <button className='loginSubmitButton' onClick={handleSubmit}>
                             Login
                         </button>
                     </div>

@@ -1,0 +1,62 @@
+div.starContainer{
+    --starFilledColor: rgb(118, 191, 215);
+    --starColor: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+div.star{
+    margin: 5px 0;
+    position: relative;
+    display: block;
+    color: red;
+    width: 0px;
+    height: 0px;
+    border-right: 10px solid transparent;
+    border-bottom: 7px solid var(--starFilledColor);
+    border-left: 10px solid transparent;
+    transform: rotate(35deg);
+}
+
+div.star.blank{
+    border-bottom: 7px solid var(--starColor);
+}
+
+div.star::after{
+    border-bottom: 8px solid var(--starFilledColor);
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    position: absolute;
+    height: 0;
+    width: 0;
+    top: -4.5px;
+    left: -6.5px;
+    display: block;
+    content: '';
+    transform: rotate(-35deg);
+}
+
+div.star.blank::after{
+    border-bottom: 8px solid var(--starColor);
+}
+
+div.star::before{
+    position: absolute;
+    display: block;
+    color: red;
+    top: 0.3px;
+    left: -10.5px;
+    width: 0px;
+    height: 0px;
+    border-right: 10px solid transparent;
+    border-bottom: 7px solid var(--starFilledColor);
+    border-left: 10px solid transparent;
+    transform: rotate(-70deg);
+    content: '';
+}
+
+div.star.blank::before{
+    border-bottom: 7px solid var(--starColor);
+}

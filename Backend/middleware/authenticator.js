@@ -7,7 +7,7 @@ const authenticator = async (req,res,next)=>{
 
     let connection = await DBconn('login procedure');
 
-    const user = req.body.user;
+    const user = req.body;
     if(!user?.name && !user?.password){
         return res.status(401).send("Provide username and passowrd")
     }
@@ -16,13 +16,17 @@ const authenticator = async (req,res,next)=>{
     let fields;
     switch(user?.role){
         case 'customer':{
-            [results,fields] = await connection.query('SELECT * from `customer` WHERE `name`= ?',[user.name])
+            [results,fields] = await connection.query('SELECT * from `customer` WHERE name = ?',[user.name])
+            break;
+            // console.log(user.name,results,fields,"length = 0")
         }case 'admin':{
-            [results,fields] = await connection.query('SELECT * from `admintable` WHERE `name`= ?',[user.name])
+            [results,fields] = await connection.query('SELECT * from `admintable` WHERE name= ?',[user.name])
+            break;
         }
     }
 
     if(results.length==0){
+        console.log(user.name,results,fields,"length = 0")
         return res.status(401).send("Invalid username or password")
     }
 

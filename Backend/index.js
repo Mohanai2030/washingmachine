@@ -92,9 +92,9 @@ app.post('/signup',signupValidator,(req,res)=>{
 app.post('/login',authenticator,getAccessToken,(req,res)=>{
   let response = {
     "authData": req.loginData,
-    "ProfileData": req.Profile
+    "profileData": req.Profile
   };
-  console.log("user id ",req.userProfile.customer_id)
+  // console.log("user id ",req.userProfile.customer_id)
   res.send(response);
 })
 

@@ -31,9 +31,9 @@ div.animateService.before{
     top:0%;
     width: fit-content;
     transition: all 1s;
-    /* animation-name: text-over;
+    animation-name: text-over;
     animation-duration: 5s;
-    animation-iteration-count: infinite; */
+    animation-iteration-count: infinite;
 }
 
 @keyframes text-over{

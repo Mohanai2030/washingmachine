@@ -8,6 +8,11 @@ div.footerContainer{
     font-size: large;
 }
 
+div.addressText{
+    display: flex;
+    gap:5%;
+}
+
 div.footerText{
     grid-column: 2;
 }
@@ -15,6 +20,8 @@ div.footerText{
 div.footerAddressContainer{
     grid-column: 4;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     gap:5%;
 }
 

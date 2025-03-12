@@ -1,6 +1,7 @@
 import './pricing.css'
 
 export function Pricing(){
+    
     return(
         <div className='pricingContianer'>
             <div>

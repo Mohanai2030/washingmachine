@@ -15,8 +15,16 @@ export default function  Footer(){
             </div>
                 
             <div className='footerAddressContainer'>
-                <img src="../../../public/images/location.jpg" alt="" height='25px' width='25px'/>
-                <p>No.13/55, S.D.P Street, Ring Road Area<br/>Dharwad - 580 007, Karntaka</p>
+                <div>
+                    <h3>
+                        Location
+                    </h3>
+                </div>
+                <div className='addressText'>
+                    <img src="../../../public/images/location.jpg" alt="" height='25px' width='25px'/>
+                    <p>No.13/55, S.D.P Street, Ring Road Area<br/>Dharwad - 580 007, Karntaka</p>
+                </div>
+                
             </div>
             
 

@@ -3,7 +3,7 @@ import { Link,useLocation } from 'react-router-dom'
 
 export function Header(){
     const location = useLocation().pathname;
-    const auth = 'ad'
+    const auth = 'admin'
     let current = 0;
     if(location=='/'){
         current = 1

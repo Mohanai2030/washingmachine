@@ -242,7 +242,7 @@ export function Chat(){
                                 <div className='pastChatName'>
                                     <strong>{customer}</strong>
                                 </div>
-                                <div className={`pastChatUnread ${chatData[customer][0]['datemsg'][0]['readornot'] ? 'yes':'no'}}`}>
+                                <div className={`pastChatUnread ${chatData[customer][chatData[customer].length-1]['datemsg'][0]['readornot'] ? 'yes':'no'}}`}>
                                 </div>
                             </div>
                             <div className='pastChatMsgAndTime'>

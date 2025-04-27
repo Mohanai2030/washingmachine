@@ -29,10 +29,19 @@ let users = {
 // app.use((req,res)=>{
 //   console.log(req);
 // })
+
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+];
+
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:5173'
-}))
+  origin: (origin, callback) => {
+    const isAllowed = !origin || allowedOrigins.includes(origin);
+    callback(null, isAllowed);
+  }
+}));
 app.use(cookieParser())
 
 
@@ -103,6 +112,7 @@ app.post('/login',authenticator,getAccessToken,(req,res)=>{
     "authData": req.loginData,
     "profileData": req.Profile
   };
+  console.log('inside login')
   // console.log("user id ",req.userProfile.customer_id)
   res.send(response);
 })
@@ -118,6 +128,9 @@ app.post('/logout',deleteRefreshToken,(req,res)=>{
   res.send('Successfully logged out');
 })
 
+// need to write the update user functionality
+
+
 app.get('/chathistory',verifyLevelChat,async(req,res)=>{
   console.log("tried to get chat history",req.query);
   let result,field;
@@ -126,7 +139,7 @@ app.get('/chathistory',verifyLevelChat,async(req,res)=>{
       [result,field] = await connection.query('SELECT * from `chat`')
     }else if(req.role == 'customer'){
       [result,field] = await connection.query('SELECT * from `chat` WHERE customer_id = ?',[req.query.customer_id])
-      console.log(req.query.customer_id)
+      console.log('tried to get chat history customer id: ',req.query.customer_id)
     }
     res.send(result)
   }catch(err){
@@ -136,7 +149,6 @@ app.get('/chathistory',verifyLevelChat,async(req,res)=>{
 })
 
 
-// need to write the update user functionality
 function broadcast(message){
   users.forEach(userWSObject => {
     userWSObject.send(message);
@@ -166,11 +178,13 @@ wss.on('connection',(ws)=>{
       let message = JSON.parse(originalmessage)
       console.log(message)
       message.body = message.body.toString();
-      let verifiedOrNot = verifyWSLevelChat(message.auth)
+      let verifiedOrNot = await verifyWSLevelChat(message.auth)
+      console.log('verifiedorNot',verifiedOrNot,Boolean(verifiedOrNot))
       if(verifiedOrNot && verifiedOrNot !='Token expired'){ //check for proper auth
-
+        console.log('verifiedorNot',verifiedOrNot)
         //adding ws to common user object - initial message done automatically
         if(message.body == 'connect'){ //need to change it so that it is not sent as a normal message accidentally
+            console.log(verifiedOrNot,'with',message.id,'has connected')
             ws.id = message.id
             ws.auth = verifiedOrNot
             users[verifiedOrNot].push(ws)
@@ -178,7 +192,7 @@ wss.on('connection',(ws)=>{
           let message_date = SQLfomratDate()
           let message_time = timeGetter()
             if(verifiedOrNot == 'customer'){
-              users.admin.forEach(adminWS => {
+              users["admin"].forEach(adminWS => {
                 adminWS.send(JSON.stringify({
                   'chat_message':message.body,
                   'sender':'customer',
@@ -193,8 +207,9 @@ wss.on('connection',(ws)=>{
               await connection.query("INSERT INTO `chat` (`chat_message`,`sender`,`reciever`,`message_time`,`message_date`,`readornot`,`customer_id`) VALUES (?,?,?,?,?,'0',?)",[message.body,'customer','admin',message_time,message_date,ws.id]);
 
             }else if(verifiedOrNot == 'admin'){
-
-              users.customer.find(customerWS => customerWS.id == message.recieverid)['ws'].send(JSON.stringify({
+              let foundCustomer = users["customer"].find(customerWS => customerWS.id == message.recieverid);
+              console.log('foundCustomer',foundCustomer)
+              foundCustomer.send(JSON.stringify({
                 'chat_message':message.body,
                 'sender':'admin',
                 'reciever':'customer',

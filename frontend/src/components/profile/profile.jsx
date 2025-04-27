@@ -22,7 +22,7 @@ export function Profile(){
                     <thead>
                     </thead>
                     <tbody>
-                        {Object.keys(profile).map(profileInfo => {
+                        {Object.keys(profile).length && Object.keys(profile).map(profileInfo => {
                             return(
                             <tr>
                                 <td><strong>{Capitalize(profileInfo)}</strong></td>

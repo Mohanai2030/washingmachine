@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken')
 
 const verifyLevelChat = (req,res,next)=>{
-    const authHeader = req.headers?.['Authorization'];
+    const authHeader = req.headers?.['authorization'];
     const accessToken = authHeader && authHeader.split(' ')[1];
-    // console.log("acessToken:",accessToken);
+    console.log("access token",req.headers);
     if(!jwt){
         return res.status(401).send("Unauthorized.Do not have a token")
     }
@@ -12,7 +12,7 @@ const verifyLevelChat = (req,res,next)=>{
             console.log("error when trying to verify accessToken",err)
             return res.status(401).send("Token expired")
         }
-        console.log("decoded:",decoded)
+        console.log("decoded access token during verifylevelchat:",decoded)
         if (decoded.roles?.[0]==1000){
             req.role = 'customer'
             next()

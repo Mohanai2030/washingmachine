@@ -9,8 +9,8 @@ import useAxiosPrivate from '../../wrappers/useAxiosPrivate'
 
 export function Chat(){
     const [textMessage,setTextmessage] = useState('')
-    let [rawChatData,setrawChatData] = useState([])
-    let chatData = chatgrouper(rawChatData);
+    let [chatData,setChatData] = useState([])
+    let [ready,setReady] = useState(false)
     let [messageRecieverId,setMessageRecieverId] = useState('')
     let [messageRecieverName,setMessageRecieverName] = useState('')
     let {profile} = useProfile();
@@ -19,7 +19,6 @@ export function Chat(){
     let ws = new WebSocket('ws://localhost:3000')
     
 
-    const [currentCustomer,setCurrentCustomer] = useState(Object.keys(chatData)[0])
     let authObject;
     if(auth?.roles[0]==1000){
       authObject = 'customer'
@@ -28,75 +27,99 @@ export function Chat(){
     }else{
       authObject = 'notLoggedIn'
     }
-      
-    console.log(profile,auth)
-
-    authObject = 'admin'
     
-
+    console.log(profile,auth)
+    const [currentCustomer,setCurrentCustomer] = useState(null)
+    
     // initial verify
     
     function handleSendMessage(){
-      if(auth?.roles[0]==1000){
-        ws.send(JSON.stringify({
-          'auth':auth.accessToken,
-          'body':textMessage,
-          'name':profile.name
-        }))
-      }else if(auth?.roles[0]==2000){
-        ws.send(JSON.stringify({
-          'auth':auth.accessToken,
-          'body':textMessage,
-          'recieverid':messageRecieverId,
-          'recieverName':messageRecieverName
-        }))}
-      
+        if(textMessage.length>0){
+            if(auth?.roles[0]==1000){
+                ws.send(JSON.stringify({
+                  'auth':auth.accessToken,
+                  'body':textMessage,
+                  'name':profile.name
+                }))
+            }else if(auth?.roles[0]==2000){
+                if(currentCustomer!=null){
+                    ws.send(JSON.stringify({
+                        'auth':auth.accessToken,
+                        'body':textMessage,
+                        'recieverid':chatData[currentCustomer][0]['datemsg'][0]['customer_id'],
+                        'recieverName':messageRecieverName
+                    }))}
+                }else{
+                    alert('Select a customer to send the message to')
+                }
+        }else{
+            alert('message must not be empty.Must contain atleast one charachter')
+        }
     }
 
+    const params = { customer_id: profile.customer_id };
+    console.log("params:", params);
+
+    useEffect(() => {
+        if (authObject === 'admin') {
+        axiosPrivate
+            .get('/api/chathistory')
+            .then((res) => {
+            console.log("------------", res);
+            let hold = chatgrouper(res.data,authObject);
+            setCurrentCustomer(Object.keys(hold)[0]);
+            setChatData(hold);
+            setReady(true);
+            })
+            .catch((err) => console.log("Error when getting previous chats of all users:", err));
+        } else if (authObject === 'customer') {
+        axiosPrivate
+            .get('/api/chathistory', { params })
+            .then((res) => {
+            console.log(res);
+            setChatData(chatgrouper(res.data,authObject));
+            setReady(true);
+            })
+            .catch((err) => console.log("Error when getting previous chats:", err));
+        } else {
+        console.log("Invalid auth in frontend chat");
+        }
+  }, [authObject]);
 
     useEffect(()=>{
-      let params = {customer_id:profile.customer_id}
-      console.log("params:",params)
-      if(authObject=='admin'){
-        axiosPrivate.get(`/api/chathistory`,{params})
-        .then((res)=>{console.log("-------------------",res);setrawChatData(res.data)})
-        .catch(err => console.log("error when getting previous chats:",err))
-      }else if(authObject == 'customer'){
-        axiosPrivate.get('/api/chathistory')
-        .then((res)=>{console.log(res);setrawChatData(res.data)})
-        .catch(err => console.log("error when getting previous chats:",err))
-      }else{
-        console.log("INvalid auth in forntendchat")
-      }
       
-      // ws.onmessage = (messageEvent) => {
-      //   if(messageEvent.data == 'ready to chat'){
-      //     if(auth.roles[0]==2000){
-      //       ws.send(JSON.stringify({
-      //               'id':profile.admin_id,
-      //               'auth':auth.accessToken,
-      //               'body':"connect"
-      //             }))
-      //    }else if(auth.roles[0]==1000){
-      //        ws.send(JSON.stringify({
-      //         'id':profile.customer_id,
-      //         'auth':auth.accessToken,
-      //         'body':"connect"
-      //       }))
-      //     }
-      //   }else{
-      //     setrawChatData([...rawChatData,JSON.parse(messageEvent.data)])
-      //     setTextmessage('')
-      //   }
-      // }
-
+      ws.onmessage = (messageEvent) => {
+        if(messageEvent.data == 'ready to chat'){
+          if(auth.roles[0]==2000){
+            ws.send(JSON.stringify({
+                    'id':profile.admin_id,
+                    'auth':auth.accessToken,
+                    'body':"connect"
+                  }))
+         }else if(auth.roles[0]==1000){
+             ws.send(JSON.stringify({
+              'id':profile.customer_id,
+              'auth':auth.accessToken,
+              'body':"connect"
+            }))
+          }
+        }else{
+            console.log("new message recieved",JSON.parse(messageEvent.data))
+        //   setrawChatData([...rawChatData,JSON.parse(messageEvent.data)])
+            setTextmessage('')
+        }
+      }
+    
+    
     },[])
+    // console.log(chatData,currentCustomer)
+    
 
     return(
         authObject=='admin'
         ?<div className='adminChatContainer'>
             <div className='previousChats'>
-                {Object.keys(chatData).map(customer=>{
+                {ready==true && Object.keys(chatData).map(customer=>{
                     return(
                         <div className={`pastChatContainer ${currentCustomer==customer?'currentCustomer':''}`} onClick={()=>{setCurrentCustomer(customer)}}>
                             <div className='pastChatNameUnread'>
@@ -108,10 +131,10 @@ export function Chat(){
                             </div>
                             <div className='pastChatMsgAndTime'>
                                 <div className='pastChatContent'>
-                                    {chatData[customer][0]['datemsg'][0]['chatcontent']}
+                                    {chatData[customer][0]['datemsg'][0]['chat_message']}
                                 </div>
                                 <div className='pastChatMessage'>
-                                    {chatData[customer][0]['datemsg'][0]['message_time']}
+                                    {chatData[customer][0]['datemsg'][0]['message_time'].slice(0,5)}
                                 </div>
                             </div>
                         </div>
@@ -120,13 +143,13 @@ export function Chat(){
             </div>
 
             <div className='adminChatContent'>
-                {
+                { ready==true && 
                     chatData[currentCustomer].map(chatDate => {
                         let thatDayData = chatDate.datemsg
                         return(
                             <div className='chatMessageDateContainer'>
                                 <div className='chatMessageDate'>
-                                    {chatDate.date}
+                                    {chatDate.date.slice(0,10)}
                                 </div>
                                 <div className='chatMessageDateBody'>
                                     {
@@ -134,10 +157,10 @@ export function Chat(){
                                             return(
                                                 <div className={chat.sender==authObject?'right chatMessage':'left chatMessage'}>
                                                     <div className='chatMessageBody'>
-                                                        {chat.chatcontent}
+                                                        {chat.chat_message}
                                                     </div>
                                                     <div className='chatMessageTiming'>
-                                                        {chat.message_time}
+                                                        {chat.message_time.slice(0,5)}
                                                     </div>
                                                     
                                                 </div>
@@ -156,7 +179,7 @@ export function Chat(){
                     <input type="text" value={textMessage} onChange={(e)=>{setTextmessage(e.target.value)}} className='adminMessageSenderInput' placeholder='Type your message here'/>
                 </div>
                 <div className='adminMessageSenderButtonContainer'>
-                    <button className='adminMessageSenderButton'>Send</button>
+                    <button className='adminMessageSenderButton' onClick={()=>{handleSendMessage()}}>Send</button>
                 </div>
             </div>
 
@@ -165,12 +188,12 @@ export function Chat(){
             {console.log(chatData)}
             <div className='chatContent'>
                 {
-                    Object.keys(chatData).length>0 && chatData[Object.keys(chatData)[0]].map(chatDate => {
+                    ready==true && chatData.map(chatDate => {
                         let thatDayData = chatDate.datemsg
                         return(
                             <div className='chatMessageDateContainer'>
                                 <div className='chatMessageDate'>
-                                    {chatDate.date}
+                                    {chatDate.date.slice(0,10)}
                                 </div>
                                 <div className='chatMessageDateBody'>
                                     {
@@ -178,12 +201,11 @@ export function Chat(){
                                             return(
                                                 <div className={chat.sender==authObject?'right chatMessage':'left chatMessage'}>
                                                     <div className='chatMessageBody'>
-                                                        {chat.chatcontent}
+                                                        {chat.chat_message}
                                                     </div>
                                                     <div className='chatMessageTiming'>
-                                                        {chat.message_time}
-                                                    </div>
-                                                    
+                                                        {chat.message_time.slice(0,5)}
+                                                    </div>    
                                                 </div>
                                             )
                                         })

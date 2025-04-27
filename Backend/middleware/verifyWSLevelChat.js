@@ -1,19 +1,21 @@
 const jwt = require('jsonwebtoken')
 
-const verifyWSLevelChat = (messageAuth)=>{
-    const accessToken = messageAuth
-    jwt.verify(accessToken,process.env.ACCESS_TOKEN_KEY,(err,decoded)=>{
-        if(err){
-            return "Token expired"
-        }
-        if (decoded.roles?.[0]==1000){
-            return 'admin'
-        }else if(decoded.roles?.[0]==2000){
-            return 'customer'
-        }else{
-            return null
-        }
-    })
+const verifyWSLevelChat = (messageAuth) => {
+    const accessToken = messageAuth;
+    return new Promise((resolve, reject) => {
+        jwt.verify(accessToken, process.env.ACCESS_TOKEN_KEY, (err, decoded) => {
+            if (err) {
+                resolve("Token expired");
+            } else if (decoded.roles?.[0] == 1000) {
+                resolve('customer');
+            } else if (decoded.roles?.[0] == 2000) {
+                resolve('admin');
+            } else {
+                resolve(null);
+            }
+        });
+    });
 }
+
 
 module.exports = verifyWSLevelChat

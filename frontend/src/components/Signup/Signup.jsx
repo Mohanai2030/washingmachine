@@ -21,7 +21,7 @@ export function Signup(){
             'email':email,
             'phone':phone
         }
-        axios.post('http://localhost:3000/signup',requestBody)
+        axios.post('/api/signup',requestBody)
         .then((res)=>{
             console.log(res);
             navigate('/login')

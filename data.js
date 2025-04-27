@@ -602,4 +602,7 @@ let anotherData = [
 
 
 
-check(anotherData);
+// check(anotherData);
+let hold = new Date()
+console.log(hold.getFullYear() + '-' + (Number(hold.getMonth())+1) + '-' + hold.getDate())
+// console.log(hold.split(' ')[4])

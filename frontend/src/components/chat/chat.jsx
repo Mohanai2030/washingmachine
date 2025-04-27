@@ -1,238 +1,99 @@
 import { useEffect, useState } from 'react'
 import './chat.css'
 import { chatgrouper } from './chatgrouper'
+import useProfile from '../../wrappers/profilecontext/useProfile'
+import useAuth from '../../wrappers/AuthContext/useAuth'
+import { Unauthorized } from '../unauthorized/unauthorized'
+import axios from 'axios'
+import useAxiosPrivate from '../../wrappers/useAxiosPrivate'
 
 export function Chat(){
     const [textMessage,setTextmessage] = useState('')
-    let chatData = chatgrouper([
-        {
-          "chatcontent": "Hello, I need help with my order.",
-          "message_date": "2025-03-01",
-          "message_time": "14:35",
-          "sender": "customer",
-          "reciever": "admin",
-          "readornot": "yes",
-          "customer_name": "John Doe"
-        },
-        {
-          "chatcontent": "Sure, can you provide your order ID?",
-          "message_date": "2025-03-01",
-          "message_time": "14:37",
-          "sender": "admin",
-          "reciever": "customer",
-          "readornot": "yes",
-          "customer_name": "John Doe"
-        },
-        {
-          "chatcontent": "Yes, it's #12345.",
-          "message_date": "2025-03-01",
-          "message_time": "14:40",
-          "sender": "customer",
-          "reciever": "admin",
-          "readornot": "yes",
-          "customer_name": "John Doe"
-        },
-        {
-          "chatcontent": "Thank you! Let me check the details.",
-          "message_date": "2025-03-01",
-          "message_time": "14:42",
-          "sender": "admin",
-          "reciever": "customer",
-          "readornot": "no",
-          "customer_name": "John Doe"
-        },
-        {
-          "chatcontent": "Hi, I haven't received my refund yet.",
-          "message_date": "2025-02-28",
-          "message_time": "10:15",
-          "sender": "customer",
-          "reciever": "admin",
-          "readornot": "yes",
-          "customer_name": "Jane Smith"
-        },
-        {
-          "chatcontent": "Let me check the status for you.",
-          "message_date": "2025-02-28",
-          "message_time": "10:18",
-          "sender": "admin",
-          "reciever": "customer",
-          "readornot": "yes",
-          "customer_name": "Jane Smith"
-        },
-        {
-          "chatcontent": "Any updates on my request?",
-          "message_date": "2025-02-28",
-          "message_time": "12:05",
-          "sender": "customer",
-          "reciever": "admin",
-          "readornot": "no",
-          "customer_name": "Jane Smith"
-        },
-        {
-          "chatcontent": "Your refund has been processed. You should receive it within 3-5 business days.",
-          "message_date": "2025-02-28",
-          "message_time": "12:10",
-          "sender": "admin",
-          "reciever": "customer",
-          "readornot": "no",
-          "customer_name": "Jane Smith"
-        },
-        {
-          "chatcontent": "Hey, my delivery is delayed. Can you check?",
-          "message_date": "2025-03-01",
-          "message_time": "16:22",
-          "sender": "customer",
-          "reciever": "admin",
-          "readornot": "yes",
-          "customer_name": "Michael Johnson"
-        },
-        {
-          "chatcontent": "Yes, I will check and update you shortly.",
-          "message_date": "2025-03-01",
-          "message_time": "16:25",
-          "sender": "admin",
-          "reciever": "customer",
-          "readornot": "yes",
-          "customer_name": "Michael Johnson"
-        },
-        {
-          "chatcontent": "I still haven't received an update.",
-          "message_date": "2025-03-02",
-          "message_time": "09:30",
-          "sender": "customer",
-          "reciever": "admin",
-          "readornot": "no",
-          "customer_name": "Michael Johnson"
-        },
-        {
-          "chatcontent": "The package is out for delivery today.",
-          "message_date": "2025-03-02",
-          "message_time": "10:00",
-          "sender": "admin",
-          "reciever": "customer",
-          "readornot": "no",
-          "customer_name": "Michael Johnson"
-        },
-        {
-          "chatcontent": "Can I change my delivery address?",
-          "message_date": "2025-02-27",
-          "message_time": "13:50",
-          "sender": "customer",
-          "reciever": "admin",
-          "readornot": "yes",
-          "customer_name": "Emily Davis"
-        },
-        {
-          "chatcontent": "I'm sorry, but the order has already been shipped.",
-          "message_date": "2025-02-27",
-          "message_time": "14:00",
-          "sender": "admin",
-          "reciever": "customer",
-          "readornot": "yes",
-          "customer_name": "Emily Davis"
-        },
-        {
-          "chatcontent": "I received the wrong item in my order.",
-          "message_date": "2025-03-01",
-          "message_time": "17:10",
-          "sender": "customer",
-          "reciever": "admin",
-          "readornot": "no",
-          "customer_name": "Emily Davis"
-        },
-        {
-          "chatcontent": "We apologize for the mistake. We will arrange a replacement.",
-          "message_date": "2025-03-01",
-          "message_time": "17:20",
-          "sender": "admin",
-          "reciever": "customer",
-          "readornot": "no",
-          "customer_name": "Emily Davis"
-        },
-        {
-          "chatcontent": "Is there a discount for first-time buyers?",
-          "message_date": "2025-02-26",
-          "message_time": "11:05",
-          "sender": "customer",
-          "reciever": "admin",
-          "readornot": "yes",
-          "customer_name": "David Wilson"
-        },
-        {
-          "chatcontent": "Yes! You get a 10% discount on your first purchase.",
-          "message_date": "2025-02-26",
-          "message_time": "11:10",
-          "sender": "admin",
-          "reciever": "customer",
-          "readornot": "yes",
-          "customer_name": "David Wilson"
-        },
-        {
-          "chatcontent": "How do I apply the discount code?",
-          "message_date": "2025-02-27",
-          "message_time": "09:20",
-          "sender": "customer",
-          "reciever": "admin",
-          "readornot": "no",
-          "customer_name": "David Wilson"
-        },
-        {
-          "chatcontent": "You can enter the code at checkout under the 'Promo Code' section.",
-          "message_date": "2025-02-27",
-          "message_time": "09:25",
-          "sender": "admin",
-          "reciever": "customer",
-          "readornot": "no",
-          "customer_name": "David Wilson"
-        },
-        {
-          "chatcontent": "Why is my payment not going through?",
-          "message_date": "2025-02-25",
-          "message_time": "15:45",
-          "sender": "customer",
-          "reciever": "admin",
-          "readornot": "yes",
-          "customer_name": "Sophia Martinez"
-        },
-        {
-          "chatcontent": "Can you check if your card details are entered correctly?",
-          "message_date": "2025-02-25",
-          "message_time": "15:50",
-          "sender": "admin",
-          "reciever": "customer",
-          "readornot": "yes",
-          "customer_name": "Sophia Martinez"
-        },
-        {
-          "chatcontent": "I checked, and it's still not working.",
-          "message_date": "2025-02-26",
-          "message_time": "08:10",
-          "sender": "customer",
-          "reciever": "admin",
-          "readornot": "no",
-          "customer_name": "Sophia Martinez"
-        },
-        {
-          "chatcontent": "Try using a different payment method or contact your bank.",
-          "message_date": "2025-02-26",
-          "message_time": "08:15",
-          "sender": "admin",
-          "reciever": "customer",
-          "readornot": "no",
-          "customer_name": "Sophia Martinez"
-        }
-    ])
+    let [rawChatData,setrawChatData] = useState([])
+    let chatData = chatgrouper(rawChatData);
+    let [messageRecieverId,setMessageRecieverId] = useState('')
+    let [messageRecieverName,setMessageRecieverName] = useState('')
+    let {profile} = useProfile();
+    let {auth} = useAuth();
+    let axiosPrivate = useAxiosPrivate()
+    let ws = new WebSocket('ws://localhost:3000')
+    
+
     const [currentCustomer,setCurrentCustomer] = useState(Object.keys(chatData)[0])
-    let auth = 'admin'
+    let authObject;
+    if(auth?.roles[0]==1000){
+      authObject = 'customer'
+    }else if(auth?.roles[0]==2000){
+      authObject = 'admin'
+    }else{
+      authObject = 'notLoggedIn'
+    }
+      
+    console.log(profile,auth)
 
+    authObject = 'admin'
+    
 
-    function handleClick(){
-
+    // initial verify
+    
+    function handleSendMessage(){
+      if(auth?.roles[0]==1000){
+        ws.send(JSON.stringify({
+          'auth':auth.accessToken,
+          'body':textMessage,
+          'name':profile.name
+        }))
+      }else if(auth?.roles[0]==2000){
+        ws.send(JSON.stringify({
+          'auth':auth.accessToken,
+          'body':textMessage,
+          'recieverid':messageRecieverId,
+          'recieverName':messageRecieverName
+        }))}
+      
     }
 
 
+    useEffect(()=>{
+      let params = {customer_id:profile.customer_id}
+      console.log("params:",params)
+      if(authObject=='admin'){
+        axiosPrivate.get(`/api/chathistory`,{params})
+        .then((res)=>{console.log("-------------------",res);setrawChatData(res.data)})
+        .catch(err => console.log("error when getting previous chats:",err))
+      }else if(authObject == 'customer'){
+        axiosPrivate.get('/api/chathistory')
+        .then((res)=>{console.log(res);setrawChatData(res.data)})
+        .catch(err => console.log("error when getting previous chats:",err))
+      }else{
+        console.log("INvalid auth in forntendchat")
+      }
+      
+      // ws.onmessage = (messageEvent) => {
+      //   if(messageEvent.data == 'ready to chat'){
+      //     if(auth.roles[0]==2000){
+      //       ws.send(JSON.stringify({
+      //               'id':profile.admin_id,
+      //               'auth':auth.accessToken,
+      //               'body':"connect"
+      //             }))
+      //    }else if(auth.roles[0]==1000){
+      //        ws.send(JSON.stringify({
+      //         'id':profile.customer_id,
+      //         'auth':auth.accessToken,
+      //         'body':"connect"
+      //       }))
+      //     }
+      //   }else{
+      //     setrawChatData([...rawChatData,JSON.parse(messageEvent.data)])
+      //     setTextmessage('')
+      //   }
+      // }
+
+    },[])
+
     return(
-        auth=='admin'
+        authObject=='admin'
         ?<div className='adminChatContainer'>
             <div className='previousChats'>
                 {Object.keys(chatData).map(customer=>{
@@ -271,7 +132,7 @@ export function Chat(){
                                     {
                                         thatDayData.map(chat => {
                                             return(
-                                                <div className={chat.sender==auth?'right chatMessage':'left chatMessage'}>
+                                                <div className={chat.sender==authObject?'right chatMessage':'left chatMessage'}>
                                                     <div className='chatMessageBody'>
                                                         {chat.chatcontent}
                                                     </div>
@@ -301,10 +162,10 @@ export function Chat(){
 
         </div>
         :<div className='chatContainer'>
-
+            {console.log(chatData)}
             <div className='chatContent'>
                 {
-                    chatData[currentCustomer].map(chatDate => {
+                    Object.keys(chatData).length>0 && chatData[Object.keys(chatData)[0]].map(chatDate => {
                         let thatDayData = chatDate.datemsg
                         return(
                             <div className='chatMessageDateContainer'>
@@ -315,7 +176,7 @@ export function Chat(){
                                     {
                                         thatDayData.map(chat => {
                                             return(
-                                                <div className={chat.sender==auth?'right chatMessage':'left chatMessage'}>
+                                                <div className={chat.sender==authObject?'right chatMessage':'left chatMessage'}>
                                                     <div className='chatMessageBody'>
                                                         {chat.chatcontent}
                                                     </div>
@@ -339,7 +200,7 @@ export function Chat(){
                     <input type="text" value={textMessage} onChange={(e)=>{setTextmessage(e.target.value)}} className='messageSenderInput' placeholder='Type your message here'/>
                 </div>
                 <div className='messageSenderButtonContainer'>
-                    <button className='messageSenderButton'>Send</button>
+                    <button className='messageSenderButton' onClick={()=>{handleSendMessage()}}>Send</button>
                 </div>
             </div>
 

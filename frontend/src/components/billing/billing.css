@@ -18,7 +18,7 @@ div.billingBody{
     border: 2px solid;
     border-radius: 5px;
     display: grid;
-    grid-template-columns: 70% 10% 20%;
+    grid-template-columns: 65% 35%;
 }
 
 div.billingPricer{
@@ -35,19 +35,22 @@ div.billingServiceHeading{
 
 div.billingServiceContainer{
     display: grid;
-    grid-template-rows: 80px ;
-    flex-direction: column;
+    grid-template-rows: 80px auto;
+    /* flex-direction: column; */
     align-items: center;
 }
 
 div.clothList{
     display: grid;
-    grid-auto-rows: 160px;
 }
 
 div.billingSummariser{
-    grid-column: 3;
     border: 1px solid;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap:20%;
 }
 
 div.clothPriceContainer{
@@ -59,12 +62,97 @@ div.clothPriceContainer{
     
 }
 
-div.clothPriceContainer input{
-    height: 30px;
-    border-radius: 8%;
+div.billingPricer input{
+    height: 25px;
+    border-radius: 8px;
+    text-align: center;
 }
 
-div.clothPriceContainer img{
+div.clothNameContainer{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: larger;
+}
+
+div.billingPricer table th{
+    /* border: 1px solid; */
+    font-size: 20px;
+}
+div.billingPricer table tr{
+    height:50px;
+}
+
+div.billingPricer table td{
+    text-align: center;
+}
+
+div.billingPricer table{
+    width: 100%;
+}
+
+div.billingPricer thead tr{
+    width:100%;
+    border: 1px solid;
+}
+
+div.billingPricer td{
+    width: 100px;
+    font-size: larger;
+}
+
+div.billingPricer tfoot{
+    margin-top: 10px;
+}
+
+div.billingSummariser td{
+    text-align: center;
+    height:40px;
+    margin: 0px 5px;
+    border: 2px solid;
+}
+
+div.billingSummariser th{
+    border: 2px solid;
+    width: 33%;
+}
+
+div.billingSummariser table{
+    border-collapse: collapse;
+    margin-top: 10%;
+    width:90%;
+}
+
+div.confirmBillButton input{
+    height:40px;
+    border-radius: 10px;
+    width:70%;
+}
+
+div.confirmBillButton button{
+    height:40px;
+    background-color: lightblue;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: larger;
+    border-radius: 10px;
+}
+
+div.billingSummariser label{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: larger;
+}
+div.confirmBillButton{
+    display: flex;
+    flex-direction: column;
+    gap:20px;
+    width: 100%;
+}
+
+div.confirmBillButton > div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:10px;
+}
+/* div.clothPriceContainer img{
     border-radius: 15px;
 }
 
@@ -89,4 +177,4 @@ div.clothImage{
     z-index: 1;
     grid-column: 2/4;
     grid-row: 2/4;
-}
+} */

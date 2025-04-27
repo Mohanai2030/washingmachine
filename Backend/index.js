@@ -9,6 +9,10 @@ const getAccessToken = require('./jwt/getAccessToken')
 const refreshToken = require('./jwt/refreshToken')
 const deleteRefreshToken = require('./jwt/deleteRefreshToken')
 const signupValidator = require('./middleware/signupvalidator')
+const adminAuthoriser = require('./middleware/adminauthoriser')
+const cookieParser = require('cookie-parser');
+const verifyLevelChat = require('./middleware/verifylevelchat')
+const verifyWSLevelChat = require('./middleware/verifyWSLevelChat')
 const http = require("http")
 const WebSocket = require("ws")
 
@@ -18,7 +22,10 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({server});
 let connection;
 
-let users = [];
+let users = {
+  'customer':[],
+  'admin':[]
+};
 // app.use((req,res)=>{
 //   console.log(req);
 // })
@@ -26,6 +33,8 @@ app.use(express.json());
 app.use(cors({
   origin: 'http://localhost:5173'
 }))
+app.use(cookieParser())
+
 
 //can be an uprotected route
 app.get('/pricing', async (req, res) => {
@@ -45,7 +54,7 @@ app.get('/pricing', async (req, res) => {
 });
 
 // protected route
-app.post('/service',async(req,res)=>{
+app.post('/service',adminAuthoriser,async(req,res)=>{
   console.log('post request recieved',req.query)
   let service = req.body.service;
   try{
@@ -77,12 +86,12 @@ app.post('/signup',signupValidator,(req,res)=>{
             res.status(200).send("User account created successfully");
           }
           case 'admin':{
-            const [results,fields] = await connection.query("INSERT INTO `admintable` (`name`,`phone`,`password`,`email`) VALUES (?,?,?)",[user.name,user.phone,hash,user.email])
+            const [results,fields] = await connection.query("INSERT INTO `admintable` (`name`,`phone`,`password`,`email`) VALUES (?,?,?,?)",[user.name,user.phone,hash,user.email])
             res.status(200).send("Admin account created successfully");
           }
         }
     }catch(error){
-        console.log("error in creating",user.role,"account",user.name,user?.email,user.phone,err)
+        console.log("error in creating",user.role,"account",user.name,user?.email,user.phone,error)
         res.status(500).send("There was an error in our server.Please try again")
     }
   })
@@ -109,6 +118,24 @@ app.post('/logout',deleteRefreshToken,(req,res)=>{
   res.send('Successfully logged out');
 })
 
+app.get('/chathistory',verifyLevelChat,async(req,res)=>{
+  console.log("tried to get chat history",req.query);
+  let result,field;
+  try{
+    if(req.role == 'admin'){
+      [result,field] = await connection.query('SELECT * from `chat`')
+    }else if(req.role == 'customer'){
+      [result,field] = await connection.query('SELECT * from `chat` WHERE customer_id = ?',[req.query.customer_id])
+      console.log(req.query.customer_id)
+    }
+    res.send(result)
+  }catch(err){
+    console.log("error while getting chat data",err);
+    res.sendStatus(500)
+  }
+})
+
+
 // need to write the update user functionality
 function broadcast(message){
   users.forEach(userWSObject => {
@@ -116,21 +143,85 @@ function broadcast(message){
   })
 }
 
+
+function SQLfomratDate(){
+  let hold = new Date()
+  return hold.getFullYear() + '-' + (Number(hold.getMonth())+1) + '-' + hold.getDate()
+}
+
+function timeGetter(){
+  return new Date().toString().split(' ')[4]
+}
+
 wss.on('connection',(ws)=>{
   console.log("connected user")
-  users.push(ws);
   ws.send('ready to chat');
+
+  //message.body,message.auth,message.id
+  //message.body,message.auth,message.id
 
   ws.on('message',async(originalmessage)=>{
     try{
-      let message = originalmessage.toString()
-      console.log('message',message)
-      broadcast(message)
-      await connection.query("INSERT INTO `chat` (`chat_message`,`message_time`,`sender`,`reciever`) VALUES (?,'2025-03-12 00:03:40','customer','admin')",[message]);
+      // console.log("original message recieved: ",originalmessage)
+      let message = JSON.parse(originalmessage)
+      console.log(message)
+      message.body = message.body.toString();
+      let verifiedOrNot = verifyWSLevelChat(message.auth)
+      if(verifiedOrNot && verifiedOrNot !='Token expired'){ //check for proper auth
+
+        //adding ws to common user object - initial message done automatically
+        if(message.body == 'connect'){ //need to change it so that it is not sent as a normal message accidentally
+            ws.id = message.id
+            ws.auth = verifiedOrNot
+            users[verifiedOrNot].push(ws)
+        }else{//normal message 
+          let message_date = SQLfomratDate()
+          let message_time = timeGetter()
+            if(verifiedOrNot == 'customer'){
+              users.admin.forEach(adminWS => {
+                adminWS.send(JSON.stringify({
+                  'chat_message':message.body,
+                  'sender':'customer',
+                  'reciever':'admin',
+                  'message_time':message_time,
+                  'message_date':message_date,
+                  'readornot':0,
+                  'customer_name':message.name,
+                  'customer_id':ws.id
+                }))
+              })
+              await connection.query("INSERT INTO `chat` (`chat_message`,`sender`,`reciever`,`message_time`,`message_date`,`readornot`,`customer_id`) VALUES (?,?,?,?,?,'0',?)",[message.body,'customer','admin',message_time,message_date,ws.id]);
+
+            }else if(verifiedOrNot == 'admin'){
+
+              users.customer.find(customerWS => customerWS.id == message.recieverid)['ws'].send(JSON.stringify({
+                'chat_message':message.body,
+                'sender':'admin',
+                'reciever':'customer',
+                'message_time':message_time,
+                'message_date':message_date,
+                'readornot':0,
+                'customer_id':message.recieverid
+              }
+            ))
+              await connection.query("INSERT INTO `chat` (`chat_message`,`sender`,`reciever`,`message_time`,`message_date`,`readornot`,`customer_id`,`customer_name`) VALUES (?,?,?,?,?,'0',?,?)",[message.body,'admin','customer',message_time,message_date,message.recieverid,message.recieverName]);
+            }
+        }      
+      }
+      console.log('message was sent successfully',message)
     }catch(err){
       console.log("When trying to send message.Error occured: ",err)
     }
   })
+
+  ws.on('close',()=>{
+    if(ws.auth == 'admin'){
+      users.admin = users.admin.filter(adminWS => adminWS.id != ws.id )
+    }else if(ws.auth == 'customer'){
+      users.customer = users.customer.filter(customerWS => customerWS.id != ws.id)
+    }
+  })
+
 })
 
 server.listen(3000, async() => {

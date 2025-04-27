@@ -10,7 +10,7 @@ const getAccessToken = async(req,res,next)=>{
         case 'customer':{
             const refreshToken = jwt.sign({
                 "name":req.body.username,
-                "role":'customer'
+                "roles":[1000]
             },
             process.env.REFRESH_TOKEN_KEY,
             {expiresIn: '1d'}
@@ -18,7 +18,7 @@ const getAccessToken = async(req,res,next)=>{
         
             const accessToken = jwt.sign({
                 "name":req.body.username,
-                "role":'customer'
+                "roles":[1000]
             },
             process.env.ACCESS_TOKEN_KEY,
             {expiresIn: '3600s'}
@@ -31,7 +31,7 @@ const getAccessToken = async(req,res,next)=>{
         
             try{
                 let [results,fields] = await connection.query("INSERT INTO customer_login (`customer_id`,`refresh_token`) VALUES (?,?)",[req.Profile.customer_id,refreshToken])
-                res.cookie('jwt',refreshToken,{expiresIn : 24 * 60 * 60 * 1000})
+                res.cookie('jwt',refreshToken,{httpOnly: true, sameSite: 'None', secure: true,expiresIn : 24 * 60 * 60 * 1000})
                 req.loginData = message;
                 next();
             }catch(err){
@@ -41,7 +41,7 @@ const getAccessToken = async(req,res,next)=>{
         }case 'admin':{
             const refreshToken = jwt.sign({
                 "name":req.body.username,
-                "role":'admin'
+                "roles":[2000]
             },
             process.env.REFRESH_TOKEN_KEY,
             {expiresIn: '1d'}
@@ -49,7 +49,7 @@ const getAccessToken = async(req,res,next)=>{
         
             const accessToken = jwt.sign({
                 "name":req.body.username,
-                "role":'admin'
+                "roles":[2000]
             },
             process.env.ACCESS_TOKEN_KEY,
             {expiresIn: '1800s'}
@@ -62,7 +62,7 @@ const getAccessToken = async(req,res,next)=>{
         
             try{
                 let [results,fields] = await connection.query("INSERT INTO admin_login (`admin_id`,`refresh_token`) VALUES (?,?)",[req.Profile.admin_id,refreshToken])
-                res.cookie('jwt',refreshToken,{expiresIn : 24 * 60 * 60 * 1000})
+                res.cookie('jwt',refreshToken,{httpOnly: true, sameSite: 'None', secure: true,expiresIn : 24 * 60 * 60 * 1000})
                 req.loginData = message;
                 next();
             }catch(err){

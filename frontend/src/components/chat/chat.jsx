@@ -39,7 +39,8 @@ export function Chat(){
                 ws.send(JSON.stringify({
                   'auth':auth.accessToken,
                   'body':textMessage,
-                  'name':profile.name
+                  'name':profile.name,
+                  'id':profile.customer_id
                 }))
             }else if(auth?.roles[0]==2000){
                 if(currentCustomer!=null){
@@ -86,9 +87,10 @@ export function Chat(){
         }
   }, [authObject]);
 
-    useEffect(()=>{
+    
       
       ws.onmessage = (messageEvent) => {
+        console.log("websocket server has messaged: ",messageEvent)
         if(messageEvent.data == 'ready to chat'){
           if(auth.roles[0]==2000){
             ws.send(JSON.stringify({
@@ -111,8 +113,7 @@ export function Chat(){
       }
     
     
-    },[])
-    // console.log(chatData,currentCustomer)
+     // console.log(chatData,currentCustomer)
     
 
     return(

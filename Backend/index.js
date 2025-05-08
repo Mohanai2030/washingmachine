@@ -175,20 +175,26 @@ wss.on('connection',(ws)=>{
   ws.on('message',async(originalmessage)=>{
     try{
       // console.log("original message recieved: ",originalmessage)
+
+      //parse the sg
       let message = JSON.parse(originalmessage)
       console.log(message)
       message.body = message.body.toString();
+
+
       let verifiedOrNot = await verifyWSLevelChat(message.auth)
       console.log('verifiedorNot',verifiedOrNot,Boolean(verifiedOrNot))
+
+
       if(verifiedOrNot && verifiedOrNot !='Token expired'){ //check for proper auth
-        console.log('verifiedorNot',verifiedOrNot)
+        console.log("message body:",message.body)
         //adding ws to common user object - initial message done automatically
-        if(message.body == 'connect'){ //need to change it so that it is not sent as a normal message accidentally
+        if(message.body == 'connect'){               //need to change it so that it is not sent as a normal message accidentally
             console.log(verifiedOrNot,'with',message.id,'has connected')
             ws.id = message.id
             ws.auth = verifiedOrNot
             users[verifiedOrNot].push(ws)
-        }else{//normal message 
+        }else{                                       //normal message 
           let message_date = SQLfomratDate()
           let message_time = timeGetter()
             if(verifiedOrNot == 'customer'){
@@ -204,7 +210,7 @@ wss.on('connection',(ws)=>{
                   'customer_id':ws.id
                 }))
               })
-              await connection.query("INSERT INTO `chat` (`chat_message`,`sender`,`reciever`,`message_time`,`message_date`,`readornot`,`customer_id`) VALUES (?,?,?,?,?,'0',?)",[message.body,'customer','admin',message_time,message_date,ws.id]);
+              await connection.query("INSERT INTO `chat` (`chat_message`,`sender`,`reciever`,`message_time`,`message_date`,`readornot`,`customer_id`,`customer_name`) VALUES (?,?,?,?,?,'0',?,?)",[message.body,'customer','admin',message_time,message_date,ws.id,message.name]);
 
             }else if(verifiedOrNot == 'admin'){
               let foundCustomer = users["customer"].find(customerWS => customerWS.id == message.recieverid);

@@ -51,7 +51,6 @@ export function chatgrouper(data,auth){
   
     let eachCustomerDate = Object.keys(newnow);
     eachCustomerDate.sort(function(a,b){return ((new Date(a)).valueOf() - (new Date(b)).valueOf())});
-    eachCustomerDate.reverse();
 
     console.log("customerDate:",eachCustomerDate)
 
@@ -70,17 +69,19 @@ export function chatgrouper(data,auth){
 
 
 export function newMessageAdder(oldList,newMessage,auth){
+  console.log("oldlist:",oldList)
   if(auth=='admin'){
 
   }else if(auth=='customer'){
-    let dateset = new Set([])
-    Object.keys(oldList).forEach(dateObj => {
-      dateset.add(dateObj.date.slice(0,10))
-    })
-    if(newMessage.message_date.slice(0,10) in dateset){
-      
+    if(oldList.map(x=>x['date'].slice(0,10)).contains(newMessage.message_date)){
+      oldList[oldList.findIndex(x => x['date'].slice(0,10)==newMessage.message_date)]['datemsg'].push(newMessage)
+    }else{
+      let datemsgobj = {date:newMessage.message_date,datemsg:[newMessage]}
+      oldList.push(datemsgobj)
     }
+    return oldList
   }else{
     alert('Ibvalid auth inside newMessageAdder')
   }
 }
+

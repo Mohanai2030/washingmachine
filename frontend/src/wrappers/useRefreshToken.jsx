@@ -10,9 +10,9 @@ const useRefreshToken = () => {
 
     // assume that every time refresh token is called the user is at not at 
     let currentlevel;
-    if(auth.roles[0]==1000){
+    if(auth?.roles[0]==1000){
         currentlevel = 'customer'
-    }else if(auth.roles[0]==2000){
+    }else if(auth?.roles[0]==2000){
         currentlevel = 'admin'
     }
     console.log("inside userefresh hook",currentlevel)

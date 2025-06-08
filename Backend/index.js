@@ -112,7 +112,7 @@ app.post('/login',authenticator,getAccessToken,(req,res)=>{
     "authData": req.loginData,
     "profileData": req.Profile
   };
-  console.log('inside login')
+  console.log('completed login',users)
   // console.log("user id ",req.userProfile.customer_id)
   res.send(response);
 })
@@ -158,7 +158,7 @@ function broadcast(message){
 
 function SQLfomratDate(){
   let hold = new Date()
-  return hold.getFullYear() + '-' + (Number(hold.getMonth())+1) + '-' + hold.getDate()
+  return hold.getFullYear() + '-' + (Number(hold.getMonth())+1).toString().padStart(2,0) + '-' + hold.getDate().toString().padStart(2,0)
 }
 
 function timeGetter(){
@@ -166,7 +166,7 @@ function timeGetter(){
 }
 
 wss.on('connection',(ws)=>{
-  console.log("connected user")
+  console.log("connected user","admin:",users["admin"].length,"customer:",users["customer"].length)
   ws.send('ready to chat');
 
   //message.body,message.auth,message.id
@@ -215,7 +215,7 @@ wss.on('connection',(ws)=>{
             }else if(verifiedOrNot == 'admin'){
               let foundCustomer = users["customer"].find(customerWS => customerWS.id == message.recieverid);
               console.log('foundCustomer',foundCustomer)
-              foundCustomer.send(JSON.stringify({
+              foundCustomer?.send(JSON.stringify({
                 'chat_message':message.body,
                 'sender':'admin',
                 'reciever':'customer',

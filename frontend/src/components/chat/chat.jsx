@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
 import './chat.css'
-import { chatgrouper } from './chatgrouper'
+import { chatgrouper, newMessageAdder } from './chatgrouper'
 import useProfile from '../../wrappers/profilecontext/useProfile'
 import useAuth from '../../wrappers/AuthContext/useAuth'
 import { Unauthorized } from '../unauthorized/unauthorized'
 import axios from 'axios'
 import useAxiosPrivate from '../../wrappers/useAxiosPrivate'
+import { useLocation } from 'react-router-dom'
+import { useRef } from 'react'
+import { produce } from 'immer';
 
 export function Chat(){
     const [textMessage,setTextmessage] = useState('')
@@ -16,7 +19,8 @@ export function Chat(){
     let {profile} = useProfile();
     let {auth} = useAuth();
     let axiosPrivate = useAxiosPrivate()
-    let ws = new WebSocket('ws://localhost:3000')
+    let location = useLocation()
+    let [ws,setws] = useState({})
     
 
     let authObject;
@@ -58,9 +62,47 @@ export function Chat(){
         }
     }
 
-    const params = { customer_id: profile.customer_id };
-    console.log("params:", params);
+    
 
+    function newMessageAdder(oldList, newMessage, auth) {
+        console.log("oldlist:", oldList);
+
+        if (auth === 'admin') {
+            // TODO: Add logic for admin if needed
+            return oldList;
+        } else if (auth === 'customer') {
+            const updatedList = produce(oldList, draft => {
+                const messageDate = newMessage.message_date;
+                const index = draft.findIndex(
+                    x => x.date.slice(0, 10) === messageDate
+                );
+
+                if (index !== -1) {
+                    draft[index].datemsg.push(newMessage);
+                } else {
+                    draft.push({
+                        date: messageDate,
+                        datemsg: [newMessage],
+                    });
+                }
+            });
+
+            return updatedList;
+        } else {
+            alert('Invalid auth inside newMessageAdder');
+            return oldList;
+        }
+    }
+
+
+    function newmessageHandler(newmessage){
+        setChatData(prev => {
+            const updated = newMessageAdder(prev, newmessage, authObject);
+            return updated; // Ensure new reference
+        });
+    }
+    const params = { customer_id: profile?.customer_id };
+    
     useEffect(() => {
         if (authObject === 'admin') {
         axiosPrivate
@@ -87,32 +129,35 @@ export function Chat(){
         }
   }, [authObject]);
 
-    
-      
-      ws.onmessage = (messageEvent) => {
-        console.log("websocket server has messaged: ",messageEvent)
-        if(messageEvent.data == 'ready to chat'){
-          if(auth.roles[0]==2000){
-            ws.send(JSON.stringify({
-                    'id':profile.admin_id,
-                    'auth':auth.accessToken,
-                    'body':"connect"
-                  }))
-         }else if(auth.roles[0]==1000){
-             ws.send(JSON.stringify({
-              'id':profile.customer_id,
-              'auth':auth.accessToken,
-              'body':"connect"
-            }))
-          }
-        }else{
-            console.log("new message recieved",JSON.parse(messageEvent.data))
-        //   setrawChatData([...rawChatData,JSON.parse(messageEvent.data)])
-            setTextmessage('')
+
+    useEffect(()=>{
+        let ws = new WebSocket('ws://localhost:3000')
+        ws.onmessage = (messageEvent) => {
+            console.log("websocket server has messaged: ",messageEvent)
+            if(messageEvent.data == 'ready to chat'){
+            if(auth.roles[0]==2000){
+                ws.send(JSON.stringify({
+                        'id':profile.admin_id,
+                        'auth':auth.accessToken,
+                        'body':"connect"
+                    }))
+            }else if(auth.roles[0]==1000){
+                ws.send(JSON.stringify({
+                'id':profile.customer_id,
+                'auth':auth.accessToken,
+                'body':"connect"
+                }))
+            }
+            }else{
+                console.log("new message recieved",JSON.parse(messageEvent.data))
+                newmessageHandler(JSON.parse(messageEvent.data))
+            }
         }
-      }
-    
-    
+        setws(ws);
+        return () => {
+            ws.close();
+        }
+    },[location.pathname])
      // console.log(chatData,currentCustomer)
     
 
@@ -190,6 +235,7 @@ export function Chat(){
             <div className='chatContent'>
                 {
                     ready==true && chatData.map(chatDate => {
+                        console.log("chatDate,",chatDate)
                         let thatDayData = chatDate.datemsg
                         return(
                             <div className='chatMessageDateContainer'>
@@ -198,7 +244,8 @@ export function Chat(){
                                 </div>
                                 <div className='chatMessageDateBody'>
                                     {
-                                        thatDayData.map(chat => {
+                                        thatDayData.map((chat,chatindex) => {
+                                            console.log("chatindex:",chatindex)
                                             return(
                                                 <div className={chat.sender==authObject?'right chatMessage':'left chatMessage'}>
                                                     <div className='chatMessageBody'>

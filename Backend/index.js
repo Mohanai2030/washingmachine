@@ -112,7 +112,7 @@ app.post('/login',authenticator,getAccessToken,(req,res)=>{
     "authData": req.loginData,
     "profileData": req.Profile
   };
-  console.log('completed login',users)
+  console.log('completed login')
   // console.log("user id ",req.userProfile.customer_id)
   res.send(response);
 })
@@ -165,71 +165,127 @@ function timeGetter(){
   return new Date().toString().split(' ')[4]
 }
 
+function messagewrapper(message,purposeofmessage){
+  return JSON.stringify({
+    'purpose':purposeofmessage,
+    'content':message
+  })
+}
+
 wss.on('connection',(ws)=>{
   console.log("connected user","admin:",users["admin"].length,"customer:",users["customer"].length)
-  ws.send('ready to chat');
+  ws.send(messagewrapper('ready to chat','connect'));
 
-  //message.body,message.auth,message.id
   //message.body,message.auth,message.id
 
   ws.on('message',async(originalmessage)=>{
     try{
       // console.log("original message recieved: ",originalmessage)
 
-      //parse the sg
+      //parse the msg
       let message = JSON.parse(originalmessage)
-      console.log(message)
-      message.body = message.body.toString();
+      let messagepurpose = message?.purpose
+      message = message?.content
+      // message.body = message.body.toString();
+      console.log(message);
 
-
+      //verify jwt
       let verifiedOrNot = await verifyWSLevelChat(message.auth)
       console.log('verifiedorNot',verifiedOrNot,Boolean(verifiedOrNot))
+    
+      if(verifiedOrNot && verifiedOrNot !='Token expired'){ 
+        // console.log("message body:",message.body)
 
+        if(messagepurpose == 'connect'){
 
-      if(verifiedOrNot && verifiedOrNot !='Token expired'){ //check for proper auth
-        console.log("message body:",message.body)
-        //adding ws to common user object - initial message done automatically
-        if(message.body == 'connect'){               //need to change it so that it is not sent as a normal message accidentally
-            console.log(verifiedOrNot,'with',message.id,'has connected')
-            ws.id = message.id
-            ws.auth = verifiedOrNot
-            users[verifiedOrNot].push(ws)
-        }else{                                       //normal message 
+          ws.id = message.id
+          ws.auth = verifiedOrNot
+          users[verifiedOrNot].push(ws)
+          console.log(verifiedOrNot,'with',message.id,'has connected',ws.id)
+
+        }else if(messagepurpose == 'readornotupdate'){
+
+          let messagecontent = message.body;
+
+          connection.query("UPDATE `chat` SET `readornot`=1 WHERE messageid IN ?",[messagecontent.messageid])
+
+          let sendobject = {
+            'customer_id':messagecontent.customer_id,
+            'messageid':messagecontent.messageid
+          }
+
+          if(verifiedOrNot=='customer'){
+
+            users['admin'].forEach(adminWS => {
+              adminWS.send(messagewrapper(sendobject,'readornotupdate'))
+            })
+
+          }else if(verifiedOrNot == 'admin'){
+
+            let foundCustomer = users["customer"].find(customerWS => customerWS.id == messagecontent.customer_id);
+            foundCustomer.send(messagewrapper(sendobject,'readornotupdate'));
+
+          }
+
+        }else if(messagepurpose == 'normalmessage'){
           let message_date = SQLfomratDate()
           let message_time = timeGetter()
-            if(verifiedOrNot == 'customer'){
-              users["admin"].forEach(adminWS => {
-                adminWS.send(JSON.stringify({
-                  'chat_message':message.body,
-                  'sender':'customer',
-                  'reciever':'admin',
-                  'message_time':message_time,
-                  'message_date':message_date,
-                  'readornot':0,
-                  'customer_name':message.name,
-                  'customer_id':ws.id
-                }))
-              })
-              await connection.query("INSERT INTO `chat` (`chat_message`,`sender`,`reciever`,`message_time`,`message_date`,`readornot`,`customer_id`,`customer_name`) VALUES (?,?,?,?,?,'0',?,?)",[message.body,'customer','admin',message_time,message_date,ws.id,message.name]);
+          if(verifiedOrNot == 'customer'){
 
-            }else if(verifiedOrNot == 'admin'){
-              let foundCustomer = users["customer"].find(customerWS => customerWS.id == message.recieverid);
-              console.log('foundCustomer',foundCustomer)
-              foundCustomer?.send(JSON.stringify({
+            let [result,field] = await connection.query("INSERT INTO `chat` (`chat_message`,`sender`,`reciever`,`message_time`,`message_date`,`readornot`,`customer_id`,`customer_name`) VALUES (?,?,?,?,?,'0',?,?)",[message.body,'customer','admin',message_time,message_date,ws.id,message.name]);
+
+            let sendmessage = {
+                'messageid':result?.insertid,
                 'chat_message':message.body,
-                'sender':'admin',
-                'reciever':'customer',
+                'sender':'customer',
+                'reciever':'admin',
                 'message_time':message_time,
                 'message_date':message_date,
                 'readornot':0,
-                'customer_id':message.recieverid
-              }
-            ))
-              await connection.query("INSERT INTO `chat` (`chat_message`,`sender`,`reciever`,`message_time`,`message_date`,`readornot`,`customer_id`,`customer_name`) VALUES (?,?,?,?,?,'0',?,?)",[message.body,'admin','customer',message_time,message_date,message.recieverid,message.recieverName]);
+                'customer_name':message.name,
+                'customer_id':ws.id
             }
-        }      
+            
+            ws.send(messagewrapper(sendmessage,'messagesendconfirmation'))
+
+            users["admin"].forEach(adminWS => {
+              adminWS.send(messagewrapper(sendmessage,'normalmessage'))
+            })
+            
+          }else if(verifiedOrNot == 'admin'){
+
+            let [result,field] = await connection.query("INSERT INTO `chat` (`chat_message`,`sender`,`reciever`,`message_time`,`message_date`,`readornot`,`customer_id`,`customer_name`) VALUES (?,?,?,?,?,'0',?,?)",[message.body,'admin','customer',message_time,message_date,message.recieverid,message.recieverName]);
+
+            let sendmessage = {
+              'messageid':result?.insertid,
+              'chat_message':message.body,
+              'sender':'admin',
+              'reciever':'customer',
+              'message_time':message_time,
+              'message_date':message_date,
+              'readornot':0,
+              'customer_id':message.recieverid,
+              'customer_name':message.recieverName
+            }
+
+            users['admin'].forEach(adminWS => {
+              adminWS.send(messagewrapper(sendmessage,'messagesendconfirmation'))
+            })
+
+            let foundCustomer = users["customer"].find(customerWS => customerWS.id == message.recieverid);
+            // console.log('foundCustomer',foundCustomer)
+            foundCustomer?.send(messagewrapper(sendmessage,'normalmessage'))
+            
+          }
+        }else{
+          console.log("message with no purpose",message)
+        }
+        console.log('message was sent successfully',message)
+      }else{
+        console.log("unauthenticated/unauthorized message recieved");
+        ws.send(messagewrapper("unauthenticated/unauthorized message recieved"),'error - no proper authetication/authorization')
       }
-      console.log('message was sent successfully',message)
+      
     }catch(err){
       console.log("When trying to send message.Error occured: ",err)
     }

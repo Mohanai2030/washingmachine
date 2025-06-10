@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import './chat.css'
-import { chatgrouper, newMessageAdder } from './chatgrouper'
+import { adminChatCopy, chatgrouper, customerChatCopy } from './chatgrouper'
 import useProfile from '../../wrappers/profilecontext/useProfile'
 import useAuth from '../../wrappers/AuthContext/useAuth'
-import { Unauthorized } from '../unauthorized/unauthorized'
+
 import axios from 'axios'
 import useAxiosPrivate from '../../wrappers/useAxiosPrivate'
 import { useLocation } from 'react-router-dom'
@@ -35,25 +35,24 @@ export function Chat(){
     console.log(profile,auth)
     const [currentCustomer,setCurrentCustomer] = useState(null)
     
-    // initial verify
-    
+
     function handleSendMessage(){
         if(textMessage.length>0){
             if(auth?.roles[0]==1000){
-                ws.send(JSON.stringify({
+                ws.send(messagewrapper({
                   'auth':auth.accessToken,
                   'body':textMessage,
                   'name':profile.name,
                   'id':profile.customer_id
-                }))
+                },'normalmessage'))
             }else if(auth?.roles[0]==2000){
                 if(currentCustomer!=null){
-                    ws.send(JSON.stringify({
+                    ws.send(messagewrapper({
                         'auth':auth.accessToken,
                         'body':textMessage,
                         'recieverid':chatData[currentCustomer][0]['datemsg'][0]['customer_id'],
-                        'recieverName':messageRecieverName
-                    }))}
+                        'recieverName':currentCustomer
+                    },'normalmessage'))}
                 }else{
                     alert('Select a customer to send the message to')
                 }
@@ -62,53 +61,93 @@ export function Chat(){
         }
     }
 
-    
-
-    function newMessageAdder(oldList, newMessage, auth) {
-        console.log("oldlist:", oldList);
-
-        if (auth === 'admin') {
-            // TODO: Add logic for admin if needed
-            return oldList;
-        } else if (auth === 'customer') {
-            const updatedList = produce(oldList, draft => {
-                const messageDate = newMessage.message_date;
-                const index = draft.findIndex(
-                    x => x.date.slice(0, 10) === messageDate
-                );
-
-                if (index !== -1) {
-                    draft[index].datemsg.push(newMessage);
-                } else {
-                    draft.push({
-                        date: messageDate,
-                        datemsg: [newMessage],
-                    });
+    function newMessageadder(oldList,newmessage){
+        let newchatdata;
+        if(auth.roles[0]==1000){
+            newchatdata = customerChatCopy(oldList)
+            let index = newchatdata.findIndex(x => x.date.slice(0,10) == newmessage.message_date);
+            if(index == -1){
+                let newdateobj = {
+                    'date':newmessage.message_date,
+                    'datemsg':[newmessage]
                 }
-            });
-
-            return updatedList;
-        } else {
-            alert('Invalid auth inside newMessageAdder');
-            return oldList;
+                newchatdata.push(newdateobj)
+            }else{
+                newchatdata[index].datemsg.push(newmessage)
+            }
+        }else if(auth.roles[0]=2000){
+            newchatdata = adminChatCopy(oldList);
+            if(newchatdata?.[newmessage.customer_name]){
+                if(newchatdata[newmessage.customer_name].map(x => x.date).includes(newmessage.message_date)){
+                    console.log('1',newchatdata[newmessage.customer_name],newchatdata[newmessage.customer_name].findIndex(x => x.date == newmessage.message_date))
+                    newchatdata[newmessage.customer_name][newchatdata[newmessage.customer_name].findIndex(x => x.date == newmessage.message_date)]['datemsg'].push(newmessage)
+                }else{
+                    console.log('2')
+                    let newdateobj = {
+                        'date':newmessage.message_date,
+                        'datemsg':[newmessage]
+                    }
+                    newchatdata[newmessage.customer_name].push(newdateobj)
+                }
+            }else{
+                console.log('3')
+                newchatdata[newmessage.customer_name] = {
+                    'date':newmessage.message_date,
+                    'datemsg':[newmessage]
+                }
+            }
+            console.log("admin new message add",newchatdata)
         }
+        return newchatdata;
     }
 
+    // function messageconfirmedAdder(oldList,newmessage){
+    //     let newchatdata;
+    //     if(auth.roles[0]==1000){
+    //         newchatdata = customerChatCopy(oldList)
+    //         let index = newchatdata.findIndex(x => x.date.slice(0,10) == newmessage.message_date);
+    //         if(index == -1){
+    //             let newdateobj = {
+    //                 'date':newmessage.message_date,
+    //                 'datemsg':[newmessage]
+    //             }
+    //             newchatdata.push(newdateobj)
+    //         }else{
+    //             newchatdata[index].datemsg.push(newmessage)
+    //         }
+    //     }else if(auth.roles[0]==2000){
+    //         newchatdata = adminChatCopy(oldList)
 
-    function newmessageHandler(newmessage){
+    //     }
+
+    function messagewrapper(message,purposeofmessage){
+        return JSON.stringify({
+            'purpose':purposeofmessage,
+            'content':message
+        })
+    }
+    
+    function newmessageHandler(newmessage,purpose){
         setChatData(prev => {
-            const updated = newMessageAdder(prev, newmessage, authObject);
+            let updated;
+            if(purpose=='normalmessage'){
+                updated = newMessageadder(prev, newmessage);
+            }else if(purpose=='messagesendconfirmation'){
+                updated = newMessageadder(prev,newmessage)
+            }            
             return updated; // Ensure new reference
         });
     }
     const params = { customer_id: profile?.customer_id };
+    
+
     
     useEffect(() => {
         if (authObject === 'admin') {
         axiosPrivate
             .get('/api/chathistory')
             .then((res) => {
-            console.log("------------", res);
+            console.log("chathistory response", res);
             let hold = chatgrouper(res.data,authObject);
             setCurrentCustomer(Object.keys(hold)[0]);
             setChatData(hold);
@@ -129,28 +168,41 @@ export function Chat(){
         }
   }, [authObject]);
 
-
+    //ws
     useEffect(()=>{
         let ws = new WebSocket('ws://localhost:3000')
         ws.onmessage = (messageEvent) => {
-            console.log("websocket server has messaged: ",messageEvent)
-            if(messageEvent.data == 'ready to chat'){
-            if(auth.roles[0]==2000){
-                ws.send(JSON.stringify({
-                        'id':profile.admin_id,
+            console.log("websocket server has messaged: ",messageEvent.data)
+            let message = JSON.parse(messageEvent.data);
+            let messagepurpose = message?.purpose;
+            message = message?.content;
+
+            if(messagepurpose == 'connect'){
+                if(message == 'ready to chat'){
+                    if(auth.roles[0]==2000){
+                        ws.send(messagewrapper({
+                                'id':profile.admin_id,
+                                'auth':auth.accessToken,
+                                'body':"connect"
+                            },'connect'))
+                    }else if(auth.roles[0]==1000){
+                        ws.send(messagewrapper({
+                        'id':profile.customer_id,
                         'auth':auth.accessToken,
                         'body':"connect"
-                    }))
-            }else if(auth.roles[0]==1000){
-                ws.send(JSON.stringify({
-                'id':profile.customer_id,
-                'auth':auth.accessToken,
-                'body':"connect"
-                }))
-            }
+                        },'connect'))
+                    }
+                }
+            }else if(messagepurpose == 'normalmessage'){
+                console.log("new message recieved",message)
+                newmessageHandler(message,'normalmessage')
+            }else if(messagepurpose == 'messagesendconfirmation'){
+                console.log("sent message confirmation recieved",message)
+                newmessageHandler(message,'messagesendconfirmation')
+            }else if(messagepurpose == 'readornotupdate'){
+
             }else{
-                console.log("new message recieved",JSON.parse(messageEvent.data))
-                newmessageHandler(JSON.parse(messageEvent.data))
+                console.log("message with different purpose or error purpose",message);
             }
         }
         setws(ws);

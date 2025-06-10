@@ -5,6 +5,7 @@ const verifyWSLevelChat = (messageAuth) => {
     return new Promise((resolve, reject) => {
         jwt.verify(accessToken, process.env.ACCESS_TOKEN_KEY, (err, decoded) => {
             if (err) {
+                console.log("error in jwt verification:",err)
                 resolve("Token expired");
             } else if (decoded.roles?.[0] == 1000) {
                 resolve('customer');

@@ -68,20 +68,32 @@ export function chatgrouper(data,auth){
 }
 
 
-export function newMessageAdder(oldList,newMessage,auth){
-  console.log("oldlist:",oldList)
-  if(auth=='admin'){
-
-  }else if(auth=='customer'){
-    if(oldList.map(x=>x['date'].slice(0,10)).contains(newMessage.message_date)){
-      oldList[oldList.findIndex(x => x['date'].slice(0,10)==newMessage.message_date)]['datemsg'].push(newMessage)
-    }else{
-      let datemsgobj = {date:newMessage.message_date,datemsg:[newMessage]}
-      oldList.push(datemsgobj)
+export function customerChatCopy(oldList){
+  console.log("inside oldlist",oldList)
+  let newList = []
+  oldList.forEach(dateclubber => {
+    let adder = {
+      date:dateclubber.date,
+      datemsg:[]
     }
-    return oldList
-  }else{
-    alert('Ibvalid auth inside newMessageAdder')
-  }
+
+    // console.log("dateclubber:",dateclubber.datemsg);
+    dateclubber.datemsg.forEach(msg => {
+      adder.datemsg = [...adder.datemsg,{...msg}]
+    })
+    newList.push(adder)
+  }) 
+  return newList
 }
 
+
+export function adminChatCopy(oldobject){
+  let newobject = {}
+  for(let customer in oldobject){
+    let lastadder = customerChatCopy(oldobject[customer])//must be an array of objects where each object has date and datemsg 
+    newobject[customer] = lastadder
+  }
+  console.log(oldobject)
+  console.log(newobject)
+  return newobject;
+}

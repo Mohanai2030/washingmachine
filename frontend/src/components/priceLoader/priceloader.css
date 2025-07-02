@@ -1,0 +1,28 @@
+div.squareBlue{
+    width:50px;
+    height:50px;
+    background-color: rgb(199, 227, 236);
+    position:relative;
+    overflow: hidden;
+}
+
+div.whiteLineCross{
+    position:absolute;
+    bottom:0;
+    background-color: white;
+    width: 75px;
+    height: 4px;
+    transform: translate(-14px,-24px) rotate(45deg);
+     /* transform: translate(-36px) rotate(45deg); */
+    animation: across 1.5s ease-in 0.3s infinite;
+}
+
+@keyframes across{
+    0%{
+        transform: translate(-36px) rotate(45deg);
+    }
+
+    100%{
+        transform: translate(10px,-50px) rotate(45deg);
+    }
+}

@@ -1,3 +1,4 @@
+import { PriceLoader } from '../priceLoader/priceloader'
 import './pricing.css'
 
 export function Pricing(){
@@ -8,6 +9,7 @@ export function Pricing(){
                 <h2>
                     Our pricing
                 </h2>
+                <PriceLoader/>
             </div>
             <div className='pricingCardContainer'>
                 <div className='pricingCard'>

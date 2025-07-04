@@ -60,7 +60,7 @@ export function Home(){
                 </div>
                 <div className='homeImageContainer'>
                     <div className='homeImageTagContainer'>
-                        <img src="../../../public/images/homepic.png" alt="" height='300px' width='500px'/>
+                        <img src="/images/homepic.png" alt="" height='300px' width='500px'/>
                     </div>
                     <div className='homePicBackgroundLayer'>
                         
@@ -76,7 +76,7 @@ export function Home(){
                 </div>
                 <div className='servicesBodyContainer'>
                     <div className='serviceContainer'>
-                        <img src="../../../public/images/NormalWash.jpg" alt="" height='250px' width='350px'/>
+                        <img src="/images/NormalWash.jpg" alt="" height='250px' width='350px'/>
                         <div className='serviceTextContainer'>
                             <h2>Normal Washing</h2>
                             <div>
@@ -85,7 +85,7 @@ export function Home(){
                         </div>
                     </div>
                     <div className='serviceContainer'>
-                        <img src="../../../public/images/DryWash.jpg" alt="" height='250px' width='350px'/>
+                        <img src="/images/DryWash.jpg" alt="" height='250px' width='350px'/>
                         <div className='serviceTextContainer'>
                             <h2>Dry Washing</h2>
                             <div>
@@ -94,7 +94,7 @@ export function Home(){
                         </div>
                     </div>
                     <div className='serviceContainer'>
-                        <img src="../../../public/images/Ironing.jpg" alt="" height='250px' width='350px'/>
+                        <img src="/images/Ironing.jpg" alt="" height='250px' width='350px'/>
                         <div className='serviceTextContainer'>
                             <h2>Ironing</h2>
                             <div>

@@ -21,7 +21,7 @@ export default function  Footer(){
                     </h3>
                 </div>
                 <div className='addressText'>
-                    <img src="../../../public/images/location.jpg" alt="" height='25px' width='25px'/>
+                    <img src="/images/location.jpg" alt="" height='25px' width='25px'/>
                     <p>No.13/55, S.D.P Street, Ring Road Area<br/>Dharwad - 580 007, Karntaka</p>
                 </div>
                 
@@ -44,9 +44,9 @@ export default function  Footer(){
                     <h3>Follow us</h3>
                 </div>
                 <div>
-                    <img src="../../../public/images/instagram.jpg" alt="" height='40px' width='40px'/>
-                    <img src="../../../public/images/facebook.jpg" alt="" height='40px' width='40px'/>
-                    <img src="../../../public/images/youtube.jpg" alt="" height='40px' width='40px'/>
+                    <img src="/images/instagram.jpg" alt="" height='40px' width='40px'/>
+                    <img src="/images/facebook.jpg" alt="" height='40px' width='40px'/>
+                    <img src="/images/youtube.jpg" alt="" height='40px' width='40px'/>
                 </div>
             </div>
             

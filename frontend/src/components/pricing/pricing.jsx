@@ -27,7 +27,7 @@ export function Pricing(){
             <div className='pricingCardContainer'>
                 <div className='pricingCard'>
                     <h3>Normal Wash</h3>
-                    <img src="../../../public/images/NormalWash.jpg" alt="" height='200px' width='300px'/>
+                    <img src="/images/NormalWash.jpg" alt="" height='200px' width='300px'/>
                     <table>
                         <colgroup>
                             <col style={{width:"70%"}}/>
@@ -60,7 +60,7 @@ export function Pricing(){
                 </div>
                 <div className='pricingCard'>
                     <h3>Dry Wash</h3>
-                    <img src="../../../public/images/Drywash.jpg" alt="" height='200px' width='300px'/>
+                    <img src="/images/Drywash.jpg" alt="" height='200px' width='300px'/>
                     <table>
                         <colgroup>
                             <col style={{width:"70%"}}/>
@@ -93,7 +93,7 @@ export function Pricing(){
                 </div>
                 <div className='pricingCard'>
                     <h3>Ironing</h3>
-                    <img src="../../../public/images/Ironing.jpg" alt="" height='200px' width='300px'/>
+                    <img src="/images/Ironing.jpg" alt="" height='200px' width='300px'/>
                     <table>
                         <colgroup>
                             <col style={{width:"70%"}}/>

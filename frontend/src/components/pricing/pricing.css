@@ -2,15 +2,16 @@ h2{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-div.pricingContianer{
+div.pricingContainer{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height:90svh;
+    min-height:90svh;
     gap:30px;
-    align-self: flex-start
+    align-self: flex-start;
+    padding-bottom: 50px;
 }
 
 div.pricingCardContainer{
@@ -41,6 +42,17 @@ div.pricingCard img{
 
 div.pricingCard table{
     width: 100%;
+    margin-top: 18px;
+}
+
+div.pricingCard table th{
+    padding-bottom: 4px;
+}
+
+div.pricingCard table tr td{
+    padding: 5px;
+    text-align:middle;
+    /* background-color: aliceblue; */
 }
 
 
@@ -52,6 +64,8 @@ th.leftAlignHeading{
     text-align: left;
 }
 
-td:nth-child(2){
+div.pricingContainer table td:nth-child(2){
     text-align: center;
+    display: flex;
+    justify-content: center;
 }

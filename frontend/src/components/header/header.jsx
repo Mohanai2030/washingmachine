@@ -27,7 +27,7 @@ export function Header(){
         <div className={`headerContainer ${auth==2000&&'headerAdminContainer'}`}>
             <div className='logoContainer'>
                 <Link to='/'>
-                    <img src="/images/Laundrylogo.png" alt="" height='50px' width='85px'/>
+                    <img src="/images/LaundryLogo.png" alt="" height='50px' width='85px'/>
                 </Link>
             </div>
             <div className='navContainer'>

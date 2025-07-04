@@ -6,7 +6,7 @@ div.homeFirstPageContainer{
     display: grid;
     width: 100%;
     height:90vh;
-    grid-template-columns: 60% 40%;
+    grid-template-columns: 55% 45%;
     justify-items: center;
     align-items: center;
 }
@@ -23,6 +23,7 @@ span.animateServiceContainer{
     height: 48px;
     overflow: hidden;
     position: relative;
+    color: lightblue;
 }
 
 
@@ -91,11 +92,11 @@ button.homeContactButton:hover{
     
 }
 
-h1,h3{
+div.homeContainer h1,h3{
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-h1{
+div.homeContainer h1{
     font-size: 40px;
     margin-block-start: 0px;
     margin-block-end: 0px;
@@ -105,6 +106,7 @@ h1{
 
 div.topicFirstLine{
     display: flex;
+    align-items: flex-end;
 }
 
 div.servicesPageContainer{
@@ -161,22 +163,14 @@ div.serviceContainer img{
 
 
 div.chooseUsPageContainer{
-    background:url(../../../public/images/ChooseUsBackground.jpg);
+    background:url(../../../public/images/ChooseUsBackground.png);
     height:90svh;
     width:100%;
     display: grid;
     justify-content: center;
     grid-template-rows: 20% 80%;
 }
-div.chooseUsPageContainer:before{
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0); 
-}
+
 
 div.chooseUsPageContainer div{
     color: white;

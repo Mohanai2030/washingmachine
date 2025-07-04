@@ -10,16 +10,18 @@ export function Home(){
     let animateRef = useRef({});
     let navigate = useNavigate()    
 
-    useEffect(()=>{
-        let holdIntervalId = setInterval(()=>{
-            setCurrent(current => (current+1)%3);
-            animateRef.current.classList.add('before')
-        },5000)
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setCurrent(prev => (prev + 1) % services.length);
+            
+            const el = animateRef.current;
+            el.classList.remove('before');
+            void el.offsetWidth; // force reflow
+            el.classList.add('before');
+        }, 5000);
 
-        return ()=>{
-            clearInterval(holdIntervalId);
-        }
-    })
+        return () => clearInterval(intervalId);
+    }, []);
 
     return(
         <div className='homeContainer'>
@@ -29,7 +31,8 @@ export function Home(){
                         <h1>
                             <div className='topicFirstLine'>
                                 <div>
-                                    Get all laundry services - &nbsp;
+                                    Get all
+                                    <br/> laundry services - &nbsp;
                                 </div>
                                 <span className='animateServiceContainer'>
                                     <div className={`animateService before` } ref={animateRef}>
@@ -46,7 +49,7 @@ export function Home(){
                             Your clothes handled with care
                         </h3>
                     </div>
-                    <Link to='./login'>
+                    <Link to='./signup'>
                         <div>
                             <button className='homeContactButton' >
                                 Sign up for 25% discount

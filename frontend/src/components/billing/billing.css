@@ -3,18 +3,19 @@ div.billingContainer{
     height: 90svh;
     display: flex;
     flex-direction: column;
-    gap:5%;
+    gap:2%;
     align-items: center;
+    margin-bottom: 10%;
 }
 
 
-div.billingHeadingContainer{
-    margin-top: 2%;
-}
+/* div.billingHeadingContainer{
+    margin-top: 1%;
+} */
 
 div.billingBody{
-    width: 70%;
-    height: 80%;
+    width: 75%;
+    min-height: 80%;
     border: 2px solid;
     border-radius: 5px;
     display: grid;
@@ -27,6 +28,7 @@ div.billingPricer{
     display: flex;
     flex-direction: column;
     gap: 5%;
+    padding:15px;
 }
 
 div.billingServiceHeading{
@@ -50,7 +52,7 @@ div.billingSummariser{
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    gap:20%;
+    gap:10%;
 }
 
 div.clothPriceContainer{

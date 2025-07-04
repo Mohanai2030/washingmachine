@@ -58,8 +58,8 @@ export function Billing(){
                             <div className='billingServiceContainer'>
                                 
                                 <div className='billingServiceHeading'>
-                                    <h2>
-                                        {service.toUpperCase()}
+                                    <h2 className='capitalize'>
+                                        {service}
                                     </h2>
                                 </div>
                                 <div className='clothList'>
@@ -95,7 +95,7 @@ export function Billing(){
                                                 return(
                                                     <tr>
                                                         <td>  
-                                                            <div className='clothNameContainer'>
+                                                            <div className='clothNameContainer capitalize'>
                                                                 {cloth.item_name}
                                                             </div>
                                                         </td>

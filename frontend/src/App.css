@@ -3,3 +3,6 @@ a:-webkit-any-link {
     cursor: pointer;
     text-decoration: none;
 }
+.capitalize{
+    text-transform: capitalize;
+}

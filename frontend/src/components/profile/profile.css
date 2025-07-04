@@ -18,12 +18,12 @@ div.profileSubContainer{
     height: 60%;
     width: 25%;
     border-radius: 10px;
+    padding: 10px;
 }
 
 div.profileHeaderContainer{
     align-self: center;
     text-align: center;
-    margin-bottom: 10%;
 }
 
 div.profileContainer table{

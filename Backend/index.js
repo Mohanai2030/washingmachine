@@ -44,11 +44,15 @@ app.use(cors({
 }));
 app.use(cookieParser())
 
-
+function wait(x){
+  return new Promise(resolve => {setTimeout(()=>{resolve()},x*1000)})
+}
 //can be an uprotected route
 app.get('/pricing', async (req, res) => {
+  
   let answer = {}
   try{
+    // await wait(3);
     let [normalwash,normalwashField] = await connection.query("SELECT * FROM price WHERE service_name='normalwash'");
     let [drywash,drywashField] = await connection.query("SELECT * FROM price WHERE service_name='drywash'")
     let [ironing,ironingField] = await connection.query("SELECT * FROM price WHERE service_name='ironing'")

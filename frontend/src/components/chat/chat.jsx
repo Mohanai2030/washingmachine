@@ -6,7 +6,7 @@ import useAuth from '../../wrappers/AuthContext/useAuth'
 
 import axios from 'axios'
 import useAxiosPrivate from '../../wrappers/useAxiosPrivate'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useRef } from 'react'
 import { produce } from 'immer';
 
@@ -24,9 +24,9 @@ export function Chat(){
     
 
     let authObject;
-    if(auth?.roles[0]==1000){
+    if(auth?.roles?.[0]==1000){
       authObject = 'customer'
-    }else if(auth?.roles[0]==2000){
+    }else if(auth?.roles?.[0]==2000){
       authObject = 'admin'
     }else{
       authObject = 'notLoggedIn'
@@ -282,7 +282,7 @@ export function Chat(){
             </div>
 
         </div>
-        :<div className='chatContainer'>
+        :authObject=='customer'?<div className='chatContainer'>
             {console.log(chatData)}
             <div className='chatContent'>
                 {
@@ -326,6 +326,14 @@ export function Chat(){
                 </div>
             </div>
 
+        </div>
+        :<div className='notCustomerChatContainer'>
+            <Link to='/signup'>
+                <button className='loginFirstButton'>
+                    Signup
+                </button>
+            </Link>
+            to chat with us
         </div>
     )
 }

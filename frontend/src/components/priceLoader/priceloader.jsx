@@ -1,12 +1,9 @@
 import './priceloader.css'
 
-export function PriceLoader(){
+export function PriceLoader({width,height}){
     return (
         <>
-            <div className='squareBlue'>
-                <div className='whiteLineCross'>
-
-                </div>
+            <div className='squareBlue' style={{width:`${width}px`,height:`${height}px`}}>
             </div>
             
         </>

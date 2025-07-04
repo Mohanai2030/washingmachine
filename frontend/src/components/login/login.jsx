@@ -29,7 +29,7 @@ export default function Login(){
             <div className='loginSubContainer'>
                 <div className='loginHeader'>
                     <div>
-                        <img src="/images/Laundrylogo.png" alt="" height='80px' width='120px'/>
+                        <img src="/images/LaundryLogo.png" alt="" height='80px' width='120px'/>
                         <h1>Tidy Laundry</h1>
                     </div>                    
                 </div>

@@ -1,6 +1,6 @@
 import './star.css'
 // need to update the Star keeps reloading again and again
-export function Star({rating}){
+export default function Star({rating}){
     let hold = []
     let revhold = []
     for(let i=0;i<rating;i++){

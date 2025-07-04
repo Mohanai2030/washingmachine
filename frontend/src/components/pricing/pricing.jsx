@@ -1,12 +1,28 @@
+import { useEffect, useState } from 'react'
+import { PriceLoader } from '../priceLoader/priceloader'
+import axios from 'axios'
 import './pricing.css'
 
 export function Pricing(){
+    let [loading,setLoading] = useState('needtofetch')
+    let [priceData,setPriceData] = useState(true)
+
+    useEffect(()=>{
+        setLoading('loading')
+        axios.get('/api/pricing')
+        .then(res => {setPriceData(res.data);setLoading('ready')})
+        .catch(err => {console.log(err);alert("There seems to be an error in getting the prices for our services")})
+    },[])
+
+    
+
     return(
-        <div className='pricingContianer'>
+        <div className='pricingContainer'>
             <div>
                 <h2>
                     Our pricing
                 </h2>
+                {/* <PriceLoader width={25} height={25}/> */}
             </div>
             <div className='pricingCardContainer'>
                 <div className='pricingCard'>
@@ -24,26 +40,21 @@ export function Pricing(){
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Shirt</td>
-                                <td>15</td>
-                            </tr>
-                            <tr>
-                                <td>Pant</td>
-                                <td>20</td>
-                            </tr>
-                            <tr>
-                                <td>Shirts</td>
-                                <td>10</td>
-                            </tr>
-                            <tr>
-                                <td>T-shirts</td>
-                                <td>20</td>
-                            </tr>
-                            <tr>
-                                <td>Bedsheet</td>
-                                <td>30</td>
-                            </tr>
+                            {loading!='ready'
+                            ?[1,2,3,4,5].map(i => {
+                                return(
+                                <tr>
+                                    <td><PriceLoader width={75} height={25}/></td>
+                                    <td><PriceLoader width={25} height={25}/></td>
+                                </tr>)
+                            })
+                            :priceData['normalwash'].map(item => {
+                                return(
+                                <tr>
+                                    <td style={{textTransform:'capitalize'}}>{item.item_name}</td>
+                                    <td>{item.price}</td>
+                                </tr>)
+                            })}  
                         </tbody>
                     </table>
                 </div>
@@ -62,26 +73,21 @@ export function Pricing(){
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Shirt</td>
-                                <td>15</td>
-                            </tr>
-                            <tr>
-                                <td>Pant</td>
-                                <td>20</td>
-                            </tr>
-                            <tr>
-                                <td>Shirts</td>
-                                <td>10</td>
-                            </tr>
-                            <tr>
-                                <td>T-shirts</td>
-                                <td>20</td>
-                            </tr>
-                            <tr>
-                                <td>Bedsheet</td>
-                                <td>30</td>
-                            </tr>
+                            {loading!='ready'
+                            ?[1,2,3,4,5].map(i => {
+                                return(
+                                <tr>
+                                    <td><PriceLoader width={75} height={25}/></td>
+                                    <td><PriceLoader width={25} height={25}/></td>
+                                </tr>)
+                            })
+                            :priceData['drywash'].map(item => {
+                                return(
+                                <tr>
+                                    <td style={{textTransform:'capitalize'}}>{item.item_name}</td>
+                                    <td>{item.price}</td>
+                                </tr>)
+                            })}  
                         </tbody>
                     </table>
                 </div>
@@ -99,27 +105,22 @@ export function Pricing(){
                                 <th>Price</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Shirt</td>
-                                <td>15</td>
-                            </tr>
-                            <tr>
-                                <td>Pant</td>
-                                <td>20</td>
-                            </tr>
-                            <tr>
-                                <td>Shirts</td>
-                                <td>10</td>
-                            </tr>
-                            <tr>
-                                <td>T-shirts</td>
-                                <td>20</td>
-                            </tr>
-                            <tr>
-                                <td>Bedsheet</td>
-                                <td>30</td>
-                            </tr>
+                          <tbody>
+                            {loading!='ready'
+                            ?[1,2,3,4,5].map(i => {
+                                return(
+                                <tr>
+                                    <td><PriceLoader width={75} height={25}/></td>
+                                    <td><PriceLoader width={25} height={25}/></td>
+                                </tr>)
+                            })
+                            :priceData['ironing'].map(item => {
+                                return(
+                                <tr>
+                                    <td style={{textTransform:'capitalize'}}>{item.item_name}</td>
+                                    <td>{item.price}</td>
+                                </tr>)
+                            })}  
                         </tbody>
                     </table>
                 </div>

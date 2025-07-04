@@ -1,0 +1,191 @@
+div.chatContainer{
+    display: grid;
+    grid-template-columns: 75% 25%;
+    grid-template-rows: 100%;
+    height: 90svh;
+    width:100%;
+}
+
+div.adminChatContainer{
+    height: 90svh;
+    width:100%;
+    display: grid;
+    grid-template-columns: 15% 65% 20%;
+}
+
+div.chatContent,div.adminChatContent{
+    border: 2px solid black;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    min-height: 100%;
+    gap:3%;
+    overflow-y: scroll;
+}
+
+div.previousChats{
+    border: 2px solid;
+}
+
+div.chatContent ul{
+    margin: 0px;
+    padding: 0px;
+}
+
+div.chatMessage{
+    border: 0.1px solid;
+    padding: 0.5%;
+    font-size: large;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    display: flex;
+    gap:1%;
+    margin: 10px 0px;
+}
+
+div.chatMessageDateContainer{
+    width:100%;
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    /* gap:10px; */
+}
+
+div.chatMessageDate{
+    /* width: 8%; */
+    padding: 0.5%;
+    background-color: black;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+}
+
+div.chatMessageDateBody{
+    width:100%;
+    display: flex;
+    flex-direction: column;
+}
+
+div.chatMessage div.chatMessageTiming{
+    align-self: flex-end;
+}
+
+div.chatContent div.left,div.adminChatContent div.left{
+    align-self: flex-start;
+    border-radius: 15px;
+    background-color: rgb(213, 210, 210);
+}
+
+div.chatContent div.right,div.adminChatContent div.right{
+    align-self: flex-end;
+    background-color: rgb(223, 241, 247);
+    border-radius: 15px;
+}
+
+div.messageSenderContainer,div.adminMessageSenderContainer{
+    border: 2px solid black;
+    /* padding: 10px; */
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 60% 10%;
+    grid-template-columns: 100%;
+    /* align-items: center; */
+    box-sizing: border-box;
+}
+
+div.messageSenderInputContainer,div.adminMessageSenderInputContainer{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top:10%
+}
+
+div.messageSenderButtonContainer,div.adminMessageSenderButtonContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button.messageSenderButton,button.adminMessageSenderButton{
+    border-radius: 15px;
+    width: 80%;
+    height:60%;
+    background-color: rgb(32, 226, 32);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 500;
+    font-size: 28px;
+    transition: all 0.3s;
+}
+
+button.messageSenderButton:hover,button.adminMessageSenderButton:hover{
+    scale: 1.05;
+}
+
+input.messageSenderInput,input.adminMessageSenderInput{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 20px;
+    font-weight: 100;
+    text-align: center;
+    width:90%;
+    height:40%;
+    border-radius: 10px;
+}
+
+li{
+    list-style-type: none;
+}
+
+div.pastChatContainer{
+    display: grid;
+    grid-template-rows: 50% 40%;
+    box-sizing: border-box;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    border-bottom: 1px solid;
+    padding-left: 4%;
+}
+
+div.currentCustomer{
+    background-color: rgb(217, 232, 237);
+}
+
+div.pastChatContainer div.pastChatNameUnread{
+    display: flex;
+    font-size: larger;    
+}
+
+div.pastChatContainer div.pastChatMsgAndTime{
+    display: grid;
+    width:100%;
+    grid-template-columns: 80% 20%;
+    overflow: hidden;
+}
+
+div.pastChatUnread.yes{
+    background-color: black;
+    width:40%;
+    height: 40%;
+}
+
+
+div.notCustomerChatContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:50vh;
+    font-size: large;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+button.loginFirstButton{
+    padding: 6px 14px;
+    border-radius: 10px;
+    margin-right: 10px;
+    background-color: lightblue;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: larger;
+}

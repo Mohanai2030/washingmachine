@@ -1,0 +1,800 @@
+[
+  {
+    "customer_id": 1,
+    "customer_name": "John Smith",
+    "messages": [
+      {
+        "chatcontent": "Hello, I need help with my recent order #45678.",
+        "message_date": "2025-02-25",
+        "message_time": "09:14",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "John Smith"
+      },
+      {
+        "chatcontent": "Hi John, I'd be happy to help. Could you provide more details about your issue?",
+        "message_date": "2025-02-25",
+        "message_time": "09:20",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "John Smith"
+      },
+      {
+        "chatcontent": "The package arrived damaged and some items are missing.",
+        "message_date": "2025-02-25",
+        "message_time": "09:25",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "John Smith"
+      },
+      {
+        "chatcontent": "I'm sorry to hear that. We'll issue a replacement. Could you send photos of the damaged package?",
+        "message_date": "2025-02-25",
+        "message_time": "09:30",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "John Smith"
+      },
+      {
+        "chatcontent": "Just sent the photos via email.",
+        "message_date": "2025-02-25",
+        "message_time": "09:45",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "John Smith"
+      },
+      {
+        "chatcontent": "Thanks, I've received them. Your replacement will be shipped today with priority delivery.",
+        "message_date": "2025-02-25",
+        "message_time": "10:00",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "John Smith"
+      }
+    ]
+  },
+  {
+    "customer_id": 2,
+    "customer_name": "Emily Johnson",
+    "messages": [
+      {
+        "chatcontent": "Hi, I'm trying to reset my password but I'm not receiving the reset email.",
+        "message_date": "2025-02-26",
+        "message_time": "14:05",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Emily Johnson"
+      },
+      {
+        "chatcontent": "Hello Emily, I can help with that. Let me check your account details.",
+        "message_date": "2025-02-26",
+        "message_time": "14:10",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Emily Johnson"
+      },
+      {
+        "chatcontent": "It seems there might be a typo in your email address. Is emily.johnson@mail.com the correct one?",
+        "message_date": "2025-02-26",
+        "message_time": "14:15",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Emily Johnson"
+      },
+      {
+        "chatcontent": "No, it should be emily.johnson@gmail.com",
+        "message_date": "2025-02-26",
+        "message_time": "14:18",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Emily Johnson"
+      },
+      {
+        "chatcontent": "Thank you, I've updated your email. Please try the password reset again.",
+        "message_date": "2025-02-26",
+        "message_time": "14:22",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Emily Johnson"
+      },
+      {
+        "chatcontent": "It worked! Thank you so much for your help.",
+        "message_date": "2025-02-26",
+        "message_time": "14:30",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Emily Johnson"
+      },
+      {
+        "chatcontent": "You're welcome! Let us know if you need anything else.",
+        "message_date": "2025-02-26",
+        "message_time": "14:35",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Emily Johnson"
+      }
+    ]
+  },
+  {
+    "customer_id": 3,
+    "customer_name": "Michael Brown",
+    "messages": [
+      {
+        "chatcontent": "When will the new product line be available?",
+        "message_date": "2025-02-27",
+        "message_time": "10:45",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Michael Brown"
+      },
+      {
+        "chatcontent": "Hi Michael, our new product line will launch on March 15th.",
+        "message_date": "2025-02-27",
+        "message_time": "11:00",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Michael Brown"
+      },
+      {
+        "chatcontent": "Will there be a pre-order option?",
+        "message_date": "2025-02-27",
+        "message_time": "11:05",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Michael Brown"
+      },
+      {
+        "chatcontent": "Yes, pre-orders will start on March 5th. Would you like to be notified?",
+        "message_date": "2025-02-27",
+        "message_time": "11:10",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Michael Brown"
+      },
+      {
+        "chatcontent": "Yes, please notify me when pre-orders open.",
+        "message_date": "2025-02-27",
+        "message_time": "11:15",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Michael Brown"
+      },
+      {
+        "chatcontent": "I've added you to our notification list. You'll receive an email once pre-orders are available.",
+        "message_date": "2025-02-27",
+        "message_time": "11:20",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Michael Brown"
+      },
+      {
+        "chatcontent": "Thank you!",
+        "message_date": "2025-02-27",
+        "message_time": "11:22",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Michael Brown"
+      }
+    ]
+  },
+  {
+    "customer_id": 4,
+    "customer_name": "Sarah Wilson",
+    "messages": [
+      {
+        "chatcontent": "I'd like to cancel my subscription.",
+        "message_date": "2025-02-28",
+        "message_time": "16:30",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Sarah Wilson"
+      },
+      {
+        "chatcontent": "Hello Sarah, I'm sorry to hear you want to cancel. May I ask the reason?",
+        "message_date": "2025-02-28",
+        "message_time": "16:40",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Sarah Wilson"
+      },
+      {
+        "chatcontent": "It's too expensive for me right now.",
+        "message_date": "2025-02-28",
+        "message_time": "16:45",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Sarah Wilson"
+      },
+      {
+        "chatcontent": "I understand. We have a more affordable plan available. Would you like to hear about it?",
+        "message_date": "2025-02-28",
+        "message_time": "16:50",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Sarah Wilson"
+      },
+      {
+        "chatcontent": "Sure, what does it include?",
+        "message_date": "2025-02-28",
+        "message_time": "16:55",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Sarah Wilson"
+      },
+      {
+        "chatcontent": "Our basic plan is 50% cheaper and includes all essential features except for advanced analytics.",
+        "message_date": "2025-02-28",
+        "message_time": "17:00",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Sarah Wilson"
+      },
+      {
+        "chatcontent": "That sounds better. I'll switch to that plan instead of cancelling.",
+        "message_date": "2025-02-28",
+        "message_time": "17:05",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Sarah Wilson"
+      },
+      {
+        "chatcontent": "Great! I've updated your subscription. The changes will take effect immediately.",
+        "message_date": "2025-02-28",
+        "message_time": "17:10",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Sarah Wilson"
+      }
+    ]
+  },
+  {
+    "customer_id": 5,
+    "customer_name": "David Thompson",
+    "messages": [
+      {
+        "chatcontent": "Is there a way to export my data?",
+        "message_date": "2025-03-01",
+        "message_time": "09:00",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "David Thompson"
+      },
+      {
+        "chatcontent": "Hi David, yes, you can export your data in several formats. What do you prefer?",
+        "message_date": "2025-03-01",
+        "message_time": "09:10",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "David Thompson"
+      },
+      {
+        "chatcontent": "CSV would be ideal for me.",
+        "message_date": "2025-03-01",
+        "message_time": "09:15",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "David Thompson"
+      },
+      {
+        "chatcontent": "Perfect. Go to Settings > Data > Export and select CSV format.",
+        "message_date": "2025-03-01",
+        "message_time": "09:20",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "David Thompson"
+      },
+      {
+        "chatcontent": "I don't see that option.",
+        "message_date": "2025-03-01",
+        "message_time": "09:25",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "David Thompson"
+      },
+      {
+        "chatcontent": "Let me check your account permissions. One moment please.",
+        "message_date": "2025-03-01",
+        "message_time": "09:30",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "David Thompson"
+      },
+      {
+        "chatcontent": "I've updated your account. Please refresh your browser and try again.",
+        "message_date": "2025-03-01",
+        "message_time": "09:35",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "David Thompson"
+      },
+      {
+        "chatcontent": "I see it now. Thanks!",
+        "message_date": "2025-03-01",
+        "message_time": "09:40",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "David Thompson"
+      }
+    ]
+  },
+  {
+    "customer_id": 6,
+    "customer_name": "Jennifer Davis",
+    "messages": [
+      {
+        "chatcontent": "I haven't received my order confirmation email.",
+        "message_date": "2025-03-01",
+        "message_time": "13:15",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "no",
+        "customer_name": "Jennifer Davis"
+      },
+      {
+        "chatcontent": "Hi Jennifer, let me check your order status. When did you place the order?",
+        "message_date": "2025-03-01",
+        "message_time": "13:20",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Jennifer Davis"
+      },
+      {
+        "chatcontent": "I placed it this morning around 10 AM.",
+        "message_date": "2025-03-01",
+        "message_time": "13:25",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Jennifer Davis"
+      },
+      {
+        "chatcontent": "Thank you. I found your order #12345. It was processed successfully but there was a delay in sending confirmations. I'll resend it now.",
+        "message_date": "2025-03-01",
+        "message_time": "13:30",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Jennifer Davis"
+      },
+      {
+        "chatcontent": "Just received it. Thank you for your help!",
+        "message_date": "2025-03-01",
+        "message_time": "13:40",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "no",
+        "customer_name": "Jennifer Davis"
+      },
+      {
+        "chatcontent": "You're welcome! Is there anything else I can help you with today?",
+        "message_date": "2025-03-01",
+        "message_time": "13:45",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Jennifer Davis"
+      },
+      {
+        "chatcontent": "No, that's all. Thanks again!",
+        "message_date": "2025-03-01",
+        "message_time": "13:50",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "no",
+        "customer_name": "Jennifer Davis"
+      }
+    ]
+  },
+  {
+    "customer_id": 7,
+    "customer_name": "Robert Garcia",
+    "messages": [
+      {
+        "chatcontent": "Do you offer bulk discounts?",
+        "message_date": "2025-03-01",
+        "message_time": "15:20",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Robert Garcia"
+      },
+      {
+        "chatcontent": "Hello Robert, yes we do offer bulk discounts starting at orders of 10+ items.",
+        "message_date": "2025-03-01",
+        "message_time": "15:25",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Robert Garcia"
+      },
+      {
+        "chatcontent": "What's the discount percentage?",
+        "message_date": "2025-03-01",
+        "message_time": "15:30",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Robert Garcia"
+      },
+      {
+        "chatcontent": "10-25 items: 10% off, 26-50 items: 15% off, 51+ items: 20% off.",
+        "message_date": "2025-03-01",
+        "message_time": "15:35",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Robert Garcia"
+      },
+      {
+        "chatcontent": "Great, I'll place an order for 30 items then.",
+        "message_date": "2025-03-01",
+        "message_time": "15:40",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Robert Garcia"
+      },
+      {
+        "chatcontent": "Excellent! Do you need help placing the order or have any other questions?",
+        "message_date": "2025-03-01",
+        "message_time": "15:45",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Robert Garcia"
+      }
+    ]
+  },
+  {
+    "customer_id": 8,
+    "customer_name": "Lisa Martinez",
+    "messages": [
+      {
+        "chatcontent": "I need to change my delivery address for my pending order.",
+        "message_date": "2025-03-01",
+        "message_time": "16:00",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Lisa Martinez"
+      },
+      {
+        "chatcontent": "Hi Lisa, I can help with that. What's your order number?",
+        "message_date": "2025-03-01",
+        "message_time": "16:05",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Lisa Martinez"
+      },
+      {
+        "chatcontent": "It's order #56789.",
+        "message_date": "2025-03-01",
+        "message_time": "16:10",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Lisa Martinez"
+      },
+      {
+        "chatcontent": "Thank you. What's the new delivery address?",
+        "message_date": "2025-03-01",
+        "message_time": "16:15",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Lisa Martinez"
+      },
+      {
+        "chatcontent": "123 New Street, Apt 4B, New York, NY 10001",
+        "message_date": "2025-03-01",
+        "message_time": "16:20",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Lisa Martinez"
+      },
+      {
+        "chatcontent": "I've updated your delivery address. Your order will be shipped to the new address.",
+        "message_date": "2025-03-01",
+        "message_time": "16:25",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Lisa Martinez"
+      },
+      {
+        "chatcontent": "Perfect, thank you!",
+        "message_date": "2025-03-01",
+        "message_time": "16:30",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Lisa Martinez"
+      }
+    ]
+  },
+  {
+    "customer_id": 9,
+    "customer_name": "James Wilson",
+    "messages": [
+      {
+        "chatcontent": "My product arrived broken. What should I do?",
+        "message_date": "2025-03-01",
+        "message_time": "17:30",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "no",
+        "customer_name": "James Wilson"
+      },
+      {
+        "chatcontent": "Hello James, I'm sorry to hear that. We'll help you resolve this issue. Could you provide your order number?",
+        "message_date": "2025-03-01",
+        "message_time": "17:35",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "James Wilson"
+      },
+      {
+        "chatcontent": "The order number is #34567.",
+        "message_date": "2025-03-01",
+        "message_time": "17:40",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "no",
+        "customer_name": "James Wilson"
+      },
+      {
+        "chatcontent": "Thank you. Could you also send some photos of the damaged product?",
+        "message_date": "2025-03-01",
+        "message_time": "17:45",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "James Wilson"
+      },
+      {
+        "chatcontent": "Just emailed the photos to support@example.com",
+        "message_date": "2025-03-01",
+        "message_time": "17:55",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "no",
+        "customer_name": "James Wilson"
+      },
+      {
+        "chatcontent": "I've received the photos and processed a replacement order. You'll receive it within 3 business days with free expedited shipping.",
+        "message_date": "2025-03-01",
+        "message_time": "18:05",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "James Wilson"
+      },
+      {
+        "chatcontent": "That's great service, thank you!",
+        "message_date": "2025-03-01",
+        "message_time": "18:10",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "no",
+        "customer_name": "James Wilson"
+      }
+    ]
+  },
+  {
+    "customer_id": 10,
+    "customer_name": "Mary Robinson",
+    "messages": [
+      {
+        "chatcontent": "Do you have a size guide for your clothing?",
+        "message_date": "2025-03-01",
+        "message_time": "18:30",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Mary Robinson"
+      },
+      {
+        "chatcontent": "Hello Mary, yes we do have a size guide. You can find it on our website under the 'Help' section.",
+        "message_date": "2025-03-01",
+        "message_time": "18:35",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Mary Robinson"
+      },
+      {
+        "chatcontent": "I can't seem to find it. Could you send me a direct link?",
+        "message_date": "2025-03-01",
+        "message_time": "18:40",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Mary Robinson"
+      },
+      {
+        "chatcontent": "Of course! Here it is: www.example.com/help/size-guide",
+        "message_date": "2025-03-01",
+        "message_time": "18:45",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Mary Robinson"
+      },
+      {
+        "chatcontent": "Perfect, thank you. One more question - do your sizes run large or small?",
+        "message_date": "2025-03-01",
+        "message_time": "18:50",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Mary Robinson"
+      },
+      {
+        "chatcontent": "Our sizes generally run true to size, but for a more fitted look, we recommend sizing down.",
+        "message_date": "2025-03-01",
+        "message_time": "18:55",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Mary Robinson"
+      },
+      {
+        "chatcontent": "Thanks for the advice!",
+        "message_date": "2025-03-01",
+        "message_time": "19:00",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Mary Robinson"
+      }
+    ]
+  },
+  {
+    "customer_id": 11,
+    "customer_name": "Thomas Clark",
+    "messages": [
+      {
+        "chatcontent": "Is your service available internationally?",
+        "message_date": "2025-03-01",
+        "message_time": "19:15",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "no",
+        "customer_name": "Thomas Clark"
+      },
+      {
+        "chatcontent": "Hello Thomas, yes, our service is available in over 50 countries worldwide.",
+        "message_date": "2025-03-01",
+        "message_time": "19:20",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Thomas Clark"
+      },
+      {
+        "chatcontent": "Great! Is Japan included?",
+        "message_date": "2025-03-01",
+        "message_time": "19:25",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "no",
+        "customer_name": "Thomas Clark"
+      },
+      {
+        "chatcontent": "Yes, Japan is definitely included in our service coverage.",
+        "message_date": "2025-03-01",
+        "message_time": "19:30",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Thomas Clark"
+      },
+      {
+        "chatcontent": "Are there any additional fees for international customers?",
+        "message_date": "2025-03-01",
+        "message_time": "19:35",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "no",
+        "customer_name": "Thomas Clark"
+      },
+      {
+        "chatcontent": "There's a small currency conversion fee of 2%, but no other additional charges for international customers.",
+        "message_date": "2025-03-01",
+        "message_time": "19:40",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Thomas Clark"
+      },
+      {
+        "chatcontent": "That sounds reasonable. I'll sign up today.",
+        "message_date": "2025-03-01",
+        "message_time": "19:45",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "no",
+        "customer_name": "Thomas Clark"
+      },
+      {
+        "chatcontent": "Excellent! Let me know if you need any help during the sign-up process.",
+        "message_date": "2025-03-01",
+        "message_time": "19:50",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Thomas Clark"
+      }
+    ]
+  },
+  {
+    "customer_id": 12,
+    "customer_name": "Patricia Lewis",
+    "messages": [
+      {
+        "chatcontent": "How long does shipping usually take?",
+        "message_date": "2025-03-01",
+        "message_time": "20:00",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Patricia Lewis"
+      },
+      {
+        "chatcontent": "Hi Patricia, standard shipping takes 3-5 business days within the US. Express shipping is 1-2 business days.",
+        "message_date": "2025-03-01",
+        "message_time": "20:05",
+        "sender": "admin",
+        "reciever": "customer",
+        "readornot": "yes",
+        "customer_name": "Patricia Lewis"
+      },
+      {
+        "chatcontent": "What about international shipping?",
+        "message_date": "2025-03-01",
+        "message_time": "20:10",
+        "sender": "customer",
+        "reciever": "admin",
+        "readornot": "yes",
+        "customer_name": "Patricia Lewis"
+      }]}]

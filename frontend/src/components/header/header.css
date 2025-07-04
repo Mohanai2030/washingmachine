@@ -7,9 +7,16 @@ div.headerContainer{
     width:100vw;
     display: grid;
     height: 75px;
-    grid-template-columns: 10% 35%;
-    column-gap: 55%;
+    grid-template-columns: 10% 55%;
+    column-gap: 35%;
     border-bottom: 0.1px solid rgba(0, 0, 0, 0.264);
+    z-index: 2;
+    background-color: white;
+}
+
+div.headerAdminContainer{
+    grid-template-columns: 10% 65%;
+    column-gap: 20%;
 }
 
 div.logoContainer{
@@ -44,4 +51,17 @@ nav div{
 
 nav div.currentPage{
     color: rgb(7, 187, 248);
+}
+
+button.loginSignupHeader{
+    background-color: lightblue;
+    border-radius: 10px;
+    padding: 4px 12px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 22px;
+}
+
+a.loginSignupHeaderContainer{
+    display: flex;
+    align-items: center;
 }

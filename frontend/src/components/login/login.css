@@ -1,0 +1,114 @@
+div.loginContainer{
+    height:100vh;
+    width:100vw;
+    border: 2px solid black;
+    box-sizing: border-box;
+    background-image: linear-gradient(45deg,white 50%,rgb(84, 177, 223));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;        
+}
+
+div.loginSubContainer{
+    box-shadow: 0px 0px 4px 4px;
+    width: 35%;
+    height: 90%;
+    border-radius: 20px;
+    display: grid;
+    grid-template-rows: 20% 6% 45% 30% ;
+    align-items: center;
+    justify-items: center;
+}
+
+div.loginHeader{
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items:center;
+    width:100%;
+    /* gap:5%; */
+}
+
+div.loginHeader img{
+    border-radius: 10px;
+}
+
+div.loginHeader > div{
+    width:75%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+div.loginBody{
+    width:80%;
+    display: flex;
+    flex-direction: column;
+    justify-content:space-evenly;
+    align-items: center;
+    height:100%;
+}
+
+div.loginBody div{
+    width:100%;
+    height: 40%;
+    display: grid;
+    grid-template-columns: 15% 80% 5%;
+    align-items: center;
+}
+
+div.loginBody div label {
+    grid-column: 2;
+    align-self: flex-end;
+    font-weight: 550;
+    font-size: large;
+}
+
+div.loginBody div input {
+    grid-column: 2;
+    box-sizing: border-box;
+}
+
+div.loginBody div select{
+    grid-column: 2;
+}
+
+div.loginBody input,div.loginBody select{
+    border-radius: 20px;
+    width: 90%;
+    height:50px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: large;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+div.loginFooter{
+    /* border: 1px solid ; */
+    width:80%;
+    height: 70%;
+    display: grid;
+    grid-template-rows: 50% 50%;
+}
+
+div.loginFooter>div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+button.loginSubmitButton{
+    border-radius: 10px;
+    width:80%;
+    height:75%;
+    background-color: lightblue;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 500;
+    font-size: larger;
+}
+
+div.loginFooter a{
+    color: rgb(73, 171, 203);
+}

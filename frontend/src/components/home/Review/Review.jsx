@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import './Review.css'
-import  Star from './Star/Star'
+import  Star from './Star/star.jsx'
 
 export function Review(){
     const firstColRef = useRef(null)

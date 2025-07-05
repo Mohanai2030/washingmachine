@@ -56,7 +56,7 @@ function pricingGrouper(priceData){
     if(!answer?.[priceItem.service_name]){
       answer[priceItem.service_name] = []
     }
-    answer[priceItem.service_name].append(priceItem)
+    answer[priceItem.service_name].push(priceItem)
   })
   return answer
 }

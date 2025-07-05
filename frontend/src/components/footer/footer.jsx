@@ -21,7 +21,7 @@ export default function  Footer(){
                     </h3>
                 </div>
                 <div className='addressText'>
-                    <img src="/images/location.jpg" alt="" height='25px' width='25px'/>
+                    <img src="/images/Location.jpg" alt="" height='25px' width='25px'/>
                     <p>No.13/55, S.D.P Street, Ring Road Area<br/>Dharwad - 580 007, Karntaka</p>
                 </div>
                 

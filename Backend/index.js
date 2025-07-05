@@ -312,7 +312,7 @@ wss.on('connection',(ws)=>{
 
 })
 
-server.listen(3000, async() => {
+server.listen(process.env.PORT, async() => {
   console.log('Server is running at port 3000');
   connection =  await DBconn();
 });

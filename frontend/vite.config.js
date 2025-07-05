@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy:{
       '/api':{
-      target:'https://washingmachine-ykuo.onrender.com:3000',
+      target:'https://washingmachine-ykuo.onrender.com',
       rewrite:(path) => path.replace(/^\/api/,'')
       }
     } 

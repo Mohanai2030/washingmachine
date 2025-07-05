@@ -69,7 +69,9 @@ app.get('/pricing', async (req, res) => {
     res.send(answer)
   }catch(err){
     console.error('Error querying the database:', err);
-    res.sendStatus(500).send(err.message);
+    if(!res.headersSent){
+      res.sendStatus(500).send(err.message);
+    }
   }
 });
 
@@ -86,7 +88,9 @@ app.post('/service',adminAuthoriser,async(req,res)=>{
     }
   }catch(err){
     console.log("error in inserting service",service,err);
-    res.status(500).send(err.message)
+    if(!res.headersSent){
+      res.status(500).send(err.message)
+    }
   }
 })
 

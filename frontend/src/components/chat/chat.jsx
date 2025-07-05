@@ -170,7 +170,7 @@ export function Chat(){
 
     //ws
     useEffect(()=>{
-        let ws = new WebSocket('ws://localhost:3000')
+        let ws = new WebSocket('ws://washingmachine-ykuo.onrender.com')
         ws.onmessage = (messageEvent) => {
             console.log("websocket server has messaged: ",messageEvent.data)
             let message = JSON.parse(messageEvent.data);

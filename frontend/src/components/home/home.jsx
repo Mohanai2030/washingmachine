@@ -85,7 +85,7 @@ export function Home(){
                         </div>
                     </div>
                     <div className='serviceContainer'>
-                        <img src="/images/DryWash.jpg" alt="" height='250px' width='350px'/>
+                        <img src="/images/Drywash.jpg" alt="" height='250px' width='350px'/>
                         <div className='serviceTextContainer'>
                             <h2>Dry Washing</h2>
                             <div>

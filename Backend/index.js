@@ -31,8 +31,7 @@ let users = {
 // })
 
 const allowedOrigins = [
-  'http://localhost:5173',
-  'http://localhost:5174',
+  'https://washingmachine-phi.vercel.app',
 ];
 
 
@@ -43,23 +42,30 @@ app.use(cors({
     callback(null, isAllowed);
   }
 }));
+
 app.use(cookieParser())
 
 function wait(x){
   return new Promise(resolve => {setTimeout(()=>{resolve()},x*1000)})
 }
+
+
+function pricingGrouper(priceData){
+  let answer = {}
+  priceData.forEach(priceItem => {
+    if(!answer?.[priceItem.service_name]){
+      answer[priceItem.service_name] = []
+    }
+    answer[priceItem.service_name].append(priceItem)
+  })
+  return answer
+}
 //can be an uprotected route
 app.get('/pricing', async (req, res) => {
-  
-  let answer = {}
   try{
     // await wait(3);
-    let [normalwash,normalwashField] = await connection.query("SELECT * FROM price WHERE service_name='normalwash'");
-    let [drywash,drywashField] = await connection.query("SELECT * FROM price WHERE service_name='drywash'")
-    let [ironing,ironingField] = await connection.query("SELECT * FROM price WHERE service_name='ironing'")
-    answer['normalwash'] = normalwash;
-    answer['drywash'] = drywash;
-    answer['ironing'] = ironing;
+    let [priceItems,priceItemsField] = await connection.query("SELECT * FROM price");
+    let answer = pricingGrouper(priceItems)
     res.send(answer)
   }catch(err){
     console.error('Error querying the database:', err);

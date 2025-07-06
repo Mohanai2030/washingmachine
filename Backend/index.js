@@ -98,7 +98,7 @@ app.post('/billing',adminAuthoriser,async(req,res)=>{
         }
       }).join(',')
     });
-
+    console.log("placeholders",placeholders);
     const serviceDetailsSql = `INSERT INTO service_details (service_id,price_id,quantity) VALUES ${placeholders}`;
 
     const [serviceDetailsrows,serviceDetailsField] = await connection.execute(serviceDetailsSql, values);

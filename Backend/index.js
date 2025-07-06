@@ -81,7 +81,7 @@ app.post('/billing',adminAuthoriser,async(req,res)=>{
   let bill = req.body;
   try{
     //first update the services table 
-    const [service,serviceFields] = await connection.query("INSERT INTO `service` (`customer_id`,`totalPrice`) VALUES (?,?)",[bill.customer_id,bill.totalPrice])
+    const [service,serviceFields] = await connection.query("INSERT INTO `service` (`customer_id`,`totalPrice`) VALUES (?,?)",[bill.customer_id,bill.total_price])
 
     //then insert into the service details tbale
     const serviceDetails = bill.serviceDetails; // Array of objects
@@ -91,7 +91,7 @@ app.post('/billing',adminAuthoriser,async(req,res)=>{
     const placeholders = Object.keys(serviceDetails).map(service => {
       return serviceDetails[service].filter(cloth => cloth.quantity>0).map(cloth => {
         if(cloth['quantity']>0){
-          values.push(service.insertid, cloth.price_id, cloth.qunatity);
+          values.push(service.insertId, cloth.price_id, cloth.quantity);
           return '(?, ?)';
         }else{
           return '';
@@ -101,7 +101,7 @@ app.post('/billing',adminAuthoriser,async(req,res)=>{
 
     const serviceDetailsSql = `INSERT INTO service_details (service_id,price_id,quantity) VALUES ${placeholders}`;
 
-    const [serviceDetailsrows,serviceDetailsField] = await db.execute(sql, values);
+    const [serviceDetailsrows,serviceDetailsField] = await connection.execute(sql, values);
     console.log("inside the billing api .Service details ",values)   
     
     // console.log(result)
@@ -165,8 +165,6 @@ app.post('/logout',deleteRefreshToken,(req,res)=>{
 })
 
 // need to write the update user functionality
-
-
 app.get('/chathistory',verifyLevelChat,async(req,res)=>{
   console.log("tried to get chat history",req.query);
   let result,field;
@@ -190,7 +188,6 @@ function broadcast(message){
     userWSObject.send(message);
   })
 }
-
 
 function SQLfomratDate(){
   let hold = new Date()

@@ -8,6 +8,17 @@ div.billingContainer{
     margin-bottom: 10%;
 }
 
+div.Text{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+div.green{
+    color:green
+}
+
+div.red{
+    color:red;
+}
 
 /* div.billingHeadingContainer{
     margin-top: 1%;

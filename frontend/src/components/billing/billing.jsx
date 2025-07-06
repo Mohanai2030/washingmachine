@@ -5,7 +5,9 @@ import useAxiosPrivate from '../../wrappers/useAxiosPrivate'
 export function Billing(){
     const axios = useAxiosPrivate(); 
     const [price,setprice] = useState({});
-    const [customerId,setCustomerId] = useState('')
+    const [customerId,setCustomerId] = useState('');
+    const [billingSuccess,setBillingSuccess] = useState('neutral');
+    
 
     function handleQuantityChange(service,clothtype,newQuantity){
         console.log(service,clothtype,newQuantity);
@@ -43,6 +45,13 @@ export function Billing(){
         return newPrice
     }
 
+    function billingSuccessHandler(){
+        setBillingSuccess('success');
+        setTimeout(()=>{
+            setBillingSuccess('neutral')
+        },3000)
+    }
+
 
     function handleBilling(){
         let billBody = {
@@ -52,14 +61,17 @@ export function Billing(){
             serviceDetails:price
         }
         axios.post('/api/billing',billBody)
-        .then(data => {
-            if(data.message == "Service recorded successfully"){
-                setprice(resetPrice())
+        .then(res => {
+            if(res.data == "Service recorded successfully"){
+                setprice(resetPrice());
+                setCustomerId(null);
+                billingSuccessHandler();
             }else{
-                console.log(data," was recieved from service api,but not done successfully")
+                console.log(res," was recieved from service api,but not done successfully")
             }
         })
         .catch(err => {
+            setBillingSuccess('failure')
             console.log("Service api error:",err)
         })
     }
@@ -229,7 +241,16 @@ export function Billing(){
                     </table>:""}
                 </div>
                     
-
+                {
+                    billingSuccess=='success'
+                    ?<div className='green Text'>
+                        Bill was recorded successfully.
+                    </div>
+                    :billingSuccess=='failure'&&
+                    <div className='red Text'>
+                        Bill wasn't recorded properly.Try again.
+                    </div>
+                }
                 <div className='confirmBillButton'>
                     <div>
                         <label htmlFor="">Customer id</label>

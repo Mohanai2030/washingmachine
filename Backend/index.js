@@ -101,7 +101,7 @@ app.post('/billing',adminAuthoriser,async(req,res)=>{
 
     const serviceDetailsSql = `INSERT INTO service_details (service_id,price_id,quantity) VALUES ${placeholders}`;
 
-    const [serviceDetailsrows,serviceDetailsField] = await connection.execute(sql, values);
+    const [serviceDetailsrows,serviceDetailsField] = await connection.execute(serviceDetailsSql, values);
     console.log("inside the billing api .Service details ",values)   
     
     // console.log(result)

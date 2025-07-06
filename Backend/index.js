@@ -70,24 +70,45 @@ app.get('/pricing', async (req, res) => {
   }catch(err){
     console.error('Error querying the database:', err);
     if(!res.headersSent){
-      res.sendStatus(500).send(err.message);
+      res.status(500).send(err.message);
     }
   }
 });
 
 // protected route
-app.post('/service',adminAuthoriser,async(req,res)=>{
-  console.log('post request recieved',req.query)
-  let service = req.body.service;
+app.post('/billing',adminAuthoriser,async(req,res)=>{
+  console.log('billing recieved',req.query)
+  let bill = req.body;
   try{
-    const [result,fields] = await connection.query("INSERT INTO `service` (`customer_id`,`service_date`,`total_clothes`,`shirts`,`pants`,`bedsheets`,`t_shirts`,`shorts`,`innerwear`,`socks`,`total_price`) VALUES (?,?,?,?,?,?,?,?,?,?,?)",[service.customer_id,`2024-12-24`,service.total_clothes,service.shirts,service.pants,service.bedsheets,service.t_shirts,service.shorts,service.innerwear,service.socks,service.total_price])
-    console.log(result)
+    //first update the services table 
+    const [service,serviceFields] = await connection.query("INSERT INTO `service` (`customer_id`,`totalPrice`) VALUES (?,?)",[bill.customer_id,bill.totalPrice])
+
+    //then insert into the service details tbale
+    const serviceDetails = bill.serviceDetails; // Array of objects
+
+    //first we would need to create the service details query from user's price object
+    const values = [];
+    const placeholders = Object.keys(serviceDetails).map(service => {
+      return serviceDetails[service].filter(cloth => cloth.quantity>0).map(cloth => {
+        if(cloth['quantity']>0){
+          values.push(service.insertid, cloth.price_id, cloth.qunatity);
+          return '(?, ?)';
+        }else{
+          return '';
+        }
+      }).join(',')
+    });
+
+    const serviceDetailsSql = `INSERT INTO service_details (service_id,price_id,quantity) VALUES ${placeholders}`;
+
+    const [serviceDetailsrows,serviceDetailsField] = await db.execute(sql, values);
+    console.log("inside the billing api .Service details ",values)   
+    
+    // console.log(result)
     res.status(200).send("Service recorded successfully");
-    if(result.affectedRows!=1){
-      console.log(result.affectedRows," were affected by the service ",service);  
-    }
+    
   }catch(err){
-    console.log("error in inserting service",service,err);
+    console.log("error in inserting service into db",bill,err);
     if(!res.headersSent){
       res.status(500).send(err.message)
     }

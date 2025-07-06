@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const verifyLevelChat = (req,res,next)=>{
     const authHeader = req.headers?.['authorization'];
     const accessToken = authHeader && authHeader.split(' ')[1];
-    console.log("access token",req.headers);
+    // console.log("access token",req.headers);
     if(!jwt){
         return res.status(401).send("Unauthorized.Do not have a token")
     }

@@ -129,10 +129,12 @@ app.post('/signup',signupValidator,(req,res)=>{
           case 'customer':{
             const [results,fields] = await connection.query("INSERT INTO `customer` (`name`,`phone`,`email`,`password`) VALUES (?,?,?,?)",[user.name,user.phone,user.email,hash])
             res.status(200).send("User account created successfully");
+            break;
           }
           case 'admin':{
             const [results,fields] = await connection.query("INSERT INTO `admintable` (`name`,`phone`,`password`,`email`) VALUES (?,?,?,?)",[user.name,user.phone,hash,user.email])
             res.status(200).send("Admin account created successfully");
+            break;
           }
         }
     }catch(error){

@@ -81,7 +81,7 @@ app.post('/billing',adminAuthoriser,async(req,res)=>{
   let bill = req.body;
   try{
     //first update the services table 
-    const [service,serviceFields] = await connection.query("INSERT INTO `service` (`customer_id`,`totalPrice`) VALUES (?,?)",[bill.customer_id,bill.total_price])
+    const [serviceRows,serviceFields] = await connection.query("INSERT INTO `service` (`customer_id`,`totalPrice`) VALUES (?,?)",[bill.customer_id,bill.total_price])
 
     //then insert into the service details tbale
     const serviceDetails = bill.serviceDetails; // Array of objects
@@ -91,7 +91,7 @@ app.post('/billing',adminAuthoriser,async(req,res)=>{
     const placeholders = Object.keys(serviceDetails).map(service => {
       return serviceDetails[service].filter(cloth => cloth.quantity>0).map(cloth => {
         if(cloth['quantity']>0){
-          values.push(service.insertId, cloth.price_id, cloth.quantity);
+          values.push(serviceRows.insertId, cloth.price_id, cloth.quantity);
           return '(?,?,?)';
         }else{
           return '';
@@ -129,10 +129,12 @@ app.post('/signup',signupValidator,(req,res)=>{
           case 'customer':{
             const [results,fields] = await connection.query("INSERT INTO `customer` (`name`,`phone`,`email`,`password`) VALUES (?,?,?,?)",[user.name,user.phone,user.email,hash])
             res.status(200).send("User account created successfully");
+            break;
           }
           case 'admin':{
             const [results,fields] = await connection.query("INSERT INTO `admintable` (`name`,`phone`,`password`,`email`) VALUES (?,?,?,?)",[user.name,user.phone,hash,user.email])
             res.status(200).send("Admin account created successfully");
+            break;
           }
         }
     }catch(error){

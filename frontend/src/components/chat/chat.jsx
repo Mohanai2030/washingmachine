@@ -101,24 +101,7 @@ export function Chat(){
         return newchatdata;
     }
 
-    // function messageconfirmedAdder(oldList,newmessage){
-    //     let newchatdata;
-    //     if(auth.roles[0]==1000){
-    //         newchatdata = customerChatCopy(oldList)
-    //         let index = newchatdata.findIndex(x => x.date.slice(0,10) == newmessage.message_date);
-    //         if(index == -1){
-    //             let newdateobj = {
-    //                 'date':newmessage.message_date,
-    //                 'datemsg':[newmessage]
-    //             }
-    //             newchatdata.push(newdateobj)
-    //         }else{
-    //             newchatdata[index].datemsg.push(newmessage)
-    //         }
-    //     }else if(auth.roles[0]==2000){
-    //         newchatdata = adminChatCopy(oldList)
 
-    //     }
 
     function messagewrapper(message,purposeofmessage){
         return JSON.stringify({
@@ -171,7 +154,7 @@ export function Chat(){
     //ws
     useEffect(()=>{
         if(authObject!='notLoggedIn'){
-            let ws = new WebSocket('wss://washingmachine-ykuo.onrender.com')
+            let ws = new WebSocket('wss://washingmachine-luv6.onrender.com')
         
         
         ws.onmessage = (messageEvent) => {

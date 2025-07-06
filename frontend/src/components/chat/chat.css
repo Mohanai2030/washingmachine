@@ -147,6 +147,8 @@ div.pastChatContainer{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     border-bottom: 1px solid;
     padding-left: 4%;
+    height:50px;
+    row-gap: 10%;
 }
 
 div.currentCustomer{

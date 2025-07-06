@@ -91,10 +91,10 @@ export function Chat(){
                 }
             }else{
                 console.log('3')
-                newchatdata[newmessage.customer_name] = {
+                newchatdata[newmessage.customer_name] = [{
                     'date':newmessage.message_date,
                     'datemsg':[newmessage]
-                }
+                }]
             }
             console.log("admin new message add",newchatdata)
         }
@@ -216,7 +216,7 @@ export function Chat(){
                             </div>
                             <div className='pastChatMsgAndTime'>
                                 <div className='pastChatContent'>
-                                    {chatData[customer][0]['datemsg'][0]['chat_message']}
+                                    {chatData[customer].at(-1)['datemsg'].at(-1)['chat_message']}
                                 </div>
                                 <div className='pastChatMessage'>
                                     {chatData[customer][0]['datemsg'][0]['message_time'].slice(0,5)}

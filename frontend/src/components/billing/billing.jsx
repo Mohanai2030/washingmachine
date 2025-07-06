@@ -1,46 +1,88 @@
 import { useEffect, useState } from 'react';
 import './billing.css'
-import axios from 'axios'
+import useAxiosPrivate from '../../wrappers/useAxiosPrivate'
+
 export function Billing(){
-    const clothes = ['shirt','pant','shorts','tshirt','bedsheet','innerwear','socks'];
-    const services = ['DryWash','NormalWash','Ironing'];
-    const [quantity,setQuantity] = useState({
-        "drywash":{
-            'bedsheet':0,
-            'pant':0,
-            'shirt':0,
-            'shorts':0,
-            't-shirt':0
-        },
-        "normalwash":{
-            'bedsheet':0,
-            'pant':0,
-            'shirt':0,
-            'shorts':0,
-            't-shirt':0,
-            'innerwear':0,
-            'socks':0
-        },
-        "ironing":{
-            'bedsheet':0,
-            'pant':0,
-            'shirt':0,
-            't-shirt':0
-        }
-    }) 
-    const [price,setprice] = useState({})
+    const axios = useAxiosPrivate(); 
+    const [price,setprice] = useState({});
+    const [customerId,setCustomerId] = useState('')
 
     function handleQuantityChange(service,clothtype,newQuantity){
         console.log(service,clothtype,newQuantity);
-        let newQuantityObject = {...quantity};
-        newQuantityObject[service][clothtype] = newQuantity;
-        console.log(newQuantityObject)
-        setQuantity(newQuantityObject);
+        let newPriceObject = structuredClone(price);
+        let clothObject = newPriceObject[service].find(clothObject => clothObject.item_name == clothtype)
+        clothObject['quantity'] = newQuantity;
+        console.log(newPriceObject)
+        setprice(newPriceObject);
+    }
+
+    function totalClothes(){
+        return Object.keys(price).reduce((serviceAccumulator,currentService,index) => {
+            return serviceAccumulator + price[currentService].reduce((clothAccumulator,currentCloth,index)=>clothAccumulator+Number(currentCloth['quantity']),0)
+        },0)
+    }
+
+    function totalPrice(){
+        return Object.keys(price).reduce((serviceAccumulator,currentService,index) => {
+            return serviceAccumulator + price[currentService].reduce((clothAccumulator,currentCloth,index)=>clothAccumulator+(currentCloth['quantity']*currentCloth['price']),0)
+        },0)
+    }
+
+    function resetPrice(){
+        let newPrice = structuredClone(price)
+        Object.keys(newPrice).forEach(service => {
+            newPrice[service] = newPrice[service].map(cloth => {
+                return(
+                    {
+                        ...cloth,
+                        quantity:0
+                    }
+                )
+            })
+        })
+        return newPrice
+    }
+
+
+    function handleBilling(){
+        let billBody = {
+            customer_id:customerId,
+            total_clothes:totalClothes(),
+            total_price:totalPrice(),
+            serviceDetails:price
+        }
+        axios.post('/api/billing',billBody)
+        .then(data => {
+            if(data.message == "Service recorded successfully"){
+                setprice(resetPrice())
+            }else{
+                console.log(data," was recieved from service api,but not done successfully")
+            }
+        })
+        .catch(err => {
+            console.log("Service api error:",err)
+        })
+    }
+
+
+    function addQuantityColumn(price){
+        Object.keys(price).forEach(service => {
+            price[service] = price[service].map(cloth => {
+                return(
+                    {
+                        ...cloth,
+                        quantity:Math.random()>0.7?1:0
+                    }
+                )
+            })
+        })
+        return price
     }
 
     useEffect(()=>{
         axios.get('/api/pricing')
-        .then(res => {console.log(res);setprice(res.data)})
+        .then(res => {console.log(res);
+                      setprice(addQuantityColumn(res.data))})
         .catch(err => {console.log(err);})
     },[])
 
@@ -53,7 +95,7 @@ export function Billing(){
             </div>
             <div className='billingBody'>
                 <div className='billingPricer'>
-                    {Object.keys(price).map(service => {
+                    {Object.keys(price).length>0 && Object.keys(price).map(service => {
                         return(
                             <div className='billingServiceContainer'>
                                 
@@ -79,7 +121,7 @@ export function Billing(){
 
                                             <th>
                                                 <div>
-                                                    Quantity
+                                                    price
                                                 </div>
                                             </th>
                                             
@@ -106,12 +148,12 @@ export function Billing(){
                                                         </td>
                                                         <td>
                                                             <div>
-                                                                <input type="number" min={0} value={quantity[service][cloth]} onChange={(e) => {handleQuantityChange(service,cloth.item_name,e.target.value)}}/>
+                                                                <input type="number" min={0} value={cloth['quantity']} onChange={(e) => {handleQuantityChange(service,cloth.item_name,e.target.value)}}/>
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div className='itemTotal'>
-                                                                <input type="text" readOnly value={quantity[service][cloth.item_name]>0?quantity[service][cloth.item_name]*cloth.price:0}/>
+                                                                <input type="text" readOnly value={cloth['quantity']>0?cloth['quantity']*cloth['price']:0}/>
                                                             </div>
                                                         </td>
                                                         
@@ -125,10 +167,10 @@ export function Billing(){
                                                 <strong>Total</strong>
                                             </td>
                                             <td>
-                                            {Object.keys(quantity[service]).reduce((accumulator,current)=>accumulator+Number(quantity[service][current]),0)} Clothes
+                                            {price[service].reduce((accumulator,current,index)=>{console.log(current,index);return accumulator+Number(current['quantity'])},0)} Clothes
                                             </td>
                                             <td>
-                                            {Object.keys(quantity[service]).reduce((accumulator,current)=> accumulator+(quantity[service][current]*price[service].find(cloth => cloth.item_name==current)["price"]),0)} rupees
+                                            {price[service].reduce((accumulator,current,index)=> accumulator+(current['quantity']*current['price']),0)} Rupees
                                             </td>
                                         </tr>
                                     </tfoot>
@@ -155,39 +197,21 @@ export function Billing(){
                             </th>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    Dry Washing
-                                </td>
-                                <td>
-                                    {Object.keys(quantity["drywash"]).reduce((accumulator,current)=>accumulator+Number(quantity["drywash"][current]),0)}
-                                </td>
-                                <td>
-                                    {Object.keys(quantity["drywash"]).reduce((accumulator,current)=> accumulator+(quantity["drywash"][current]*price["drywash"].find(cloth => cloth.item_name==current)["price"]),0)}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Normal Washing
-                                </td>
-                                <td>
-                                    {Object.keys(quantity["normalwash"]).reduce((accumulator,current)=>accumulator+Number(quantity["normalwash"][current]),0)}
-                                </td>
-                                <td>
-                                    {Object.keys(quantity["normalwash"]).reduce((accumulator,current)=> accumulator+(quantity["normalwash"][current]*price["normalwash"].find(cloth => cloth.item_name==current)["price"]),0)} 
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Ironing
-                                </td>
-                                <td>
-                                {Object.keys(quantity["ironing"]).reduce((accumulator,current)=>accumulator+Number(quantity["ironing"][current]),0)}
-                                </td>
-                                <td>
-                                    {Object.keys(quantity["ironing"]).reduce((accumulator,current)=> accumulator+(quantity["ironing"][current]*price["ironing"].find(cloth => cloth.item_name==current)["price"]),0)} 
-                                </td>
-                            </tr>
+                            {Object.keys(price).map(service => {
+                                return (
+                                    <tr>
+                                        <td className='capitalize'>
+                                            {service}
+                                        </td>
+                                        <td>
+                                            {price[service].reduce((accumulator,current,index)=>accumulator+Number(current['quantity']),0)}
+                                        </td>
+                                        <td>
+                                            {price[service].reduce((accumulator,current,index)=> accumulator+(current['quantity']*current["price"]),0)}
+                                        </td>
+                                    </tr>
+                                )
+                            })}
                         </tbody>
                         <tfoot>
                             <tr>
@@ -195,16 +219,10 @@ export function Billing(){
                                     <strong>Total</strong>
                                 </td>
                                 <td>
-                                {Number(Object.keys(quantity["ironing"]).reduce((accumulator,current)=>accumulator+Number(quantity["ironing"][current]),0)) 
-                                + Number(Object.keys(quantity["drywash"]).reduce((accumulator,current)=>accumulator+Number(quantity["drywash"][current]),0)) + 
-                                Number(Object.keys(quantity["normalwash"]).reduce((accumulator,current)=>accumulator+Number(quantity["normalwash"][current]),0))}  clothes
+                                {totalClothes()}  clothes
                                 </td>
                                 <td>
-                                {Number(Object.keys(quantity["drywash"]).reduce((accumulator,current)=> accumulator+(quantity["drywash"][current]*price["drywash"].find(cloth => cloth.item_name==current)["price"]),0))
-                                +
-                                Number(Object.keys(quantity["normalwash"]).reduce((accumulator,current)=> accumulator+(quantity["normalwash"][current]*price["normalwash"].find(cloth => cloth.item_name==current)["price"]),0))
-                                +
-                                Number(Object.keys(quantity["ironing"]).reduce((accumulator,current)=> accumulator+(quantity["ironing"][current]*price["ironing"].find(cloth => cloth.item_name==current)["price"]),0))} Rupees
+                                {totalPrice()} rupees
                                 </td>
                             </tr>
                         </tfoot>
@@ -214,11 +232,11 @@ export function Billing(){
 
                 <div className='confirmBillButton'>
                     <div>
-                        <label htmlFor="">Customer Name</label>
-                        <input type="text" />
+                        <label htmlFor="">Customer id</label>
+                        <input type="number" value={customerId} onChange={(e)=>{setCustomerId(e.target.value)}}/>
                     </div>
                     <div>
-                        <button>Confirm Bill</button>
+                        <button onClick={handleBilling}>Confirm Bill</button>
                     </div>
                 </div>
             </div>

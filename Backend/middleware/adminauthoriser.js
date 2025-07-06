@@ -18,7 +18,7 @@ const adminAuthoriser = (req,res,next) => {
             }
         })
     }else{
-        return res.sattus(403).send("Try to login again to make valid requests")
+        return res.status(403).send("Try to login again to make valid requests")
     }
     
 }

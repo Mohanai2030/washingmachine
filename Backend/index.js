@@ -92,7 +92,7 @@ app.post('/billing',adminAuthoriser,async(req,res)=>{
       return serviceDetails[service].filter(cloth => cloth.quantity>0).map(cloth => {
         if(cloth['quantity']>0){
           values.push(service.insertId, cloth.price_id, cloth.quantity);
-          return '(?, ?)';
+          return '(?,?,?)';
         }else{
           return '';
         }

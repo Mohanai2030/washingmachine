@@ -97,7 +97,7 @@ app.post('/billing',adminAuthoriser,async(req,res)=>{
           return '';
         }
       }).join(',')
-    });
+    }).join(',')
     console.log("placeholders",placeholders);
     const serviceDetailsSql = `INSERT INTO service_details (service_id,price_id,quantity) VALUES ${placeholders}`;
 

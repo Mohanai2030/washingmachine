@@ -602,7 +602,156 @@ let anotherData = [
 
 
 
-// check(anotherData);
-let hold = new Date()
-console.log(hold.getFullYear() + '-' + (Number(hold.getMonth())+1) + '-' + hold.getDate())
-// console.log(hold.split(' ')[4])
+// // check(anotherData);
+// let hold = new Date()
+// console.log(hold.getFullYear() + '-' + (Number(hold.getMonth())+1) + '-' + hold.getDate())
+// // console.log(hold.split(' ')[4])
+
+function addQuantityColumn(price){
+    Object.keys(price).forEach(service => {
+        price[service] = price[service].map(cloth => {
+            return(
+                {
+                    ...cloth,
+                    quantity:Math.random()>0.7?1:0
+                }
+            )
+        })
+    })
+    return price
+}
+
+function resetPrice(price){
+        let newPrice = structuredClone(price)
+        Object.keys(newPrice).forEach(service => {
+            newPrice[service] = newPrice[service].map(cloth => {
+                return(
+                    {
+                        ...cloth,
+                        quantity:0
+                    }
+                )
+            })
+        })
+        console.log(newPrice)
+
+}
+
+let price = {
+  "drywash": [
+    {
+      "price_id": 1,
+      "item_name": "bedsheet",
+      "service_name": "drywash",
+      "price": 50
+    },
+    {
+      "price_id": 5,
+      "item_name": "pant",
+      "service_name": "drywash",
+      "price": 45
+    },
+    {
+      "price_id": 8,
+      "item_name": "shirt",
+      "service_name": "drywash",
+      "price": 20
+    },
+    {
+      "price_id": 11,
+      "item_name": "shorts",
+      "service_name": "drywash",
+      "price": 20
+    },
+    {
+      "price_id": 14,
+      "item_name": "t-shirt",
+      "service_name": "drywash",
+      "price": 25
+    }
+  ],
+  "normalwash": [
+    {
+      "price_id": 2,
+      "item_name": "bedsheet",
+      "service_name": "normalwash",
+      "price": 35
+    },
+    {
+      "price_id": 4,
+      "item_name": "innerwear",
+      "service_name": "normalwash",
+      "price": 5
+    },
+    {
+      "price_id": 6,
+      "item_name": "pant",
+      "service_name": "normalwash",
+      "price": 20
+    },
+    {
+      "price_id": 9,
+      "item_name": "shirt",
+      "service_name": "normalwash",
+      "price": 15
+    },
+    {
+      "price_id": 12,
+      "item_name": "shorts",
+      "service_name": "normalwash",
+      "price": 10
+    },
+    {
+      "price_id": 13,
+      "item_name": "socks",
+      "service_name": "normalwash",
+      "price": 5
+    },
+    {
+      "price_id": 15,
+      "item_name": "t-shirt",
+      "service_name": "normalwash",
+      "price": 15
+    }
+  ],
+  "ironing": [
+    {
+      "price_id": 3,
+      "item_name": "bedsheet",
+      "service_name": "ironing",
+      "price": 30
+    },
+    {
+      "price_id": 7,
+      "item_name": "pant",
+      "service_name": "ironing",
+      "price": 15
+    },
+    {
+      "price_id": 10,
+      "item_name": "shirt",
+      "service_name": "ironing",
+      "price": 10
+    },
+    {
+      "price_id": 16,
+      "item_name": "t-shirt",
+      "service_name": "ironing",
+      "price": 5
+    }
+  ]
+}
+
+const values = [];
+const placeholders = Object.keys(addQuantityColumn(price)).map(service => {
+  return price[service].filter(cloth => cloth.quantity>0).map(cloth => {
+    if(cloth['quantity']>0){
+      values.push(service.insertid, cloth.price_id, cloth.qunatity);
+      return '(?, ?)';
+    }else{
+      return '';
+    }
+  }).join(',')
+}).join(',');
+
+console.log(placeholders)

@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://washingmachine-ykuo.onrender.com/$1"
+      "destination": "https://washingmachine-luv6.onrender.com/$1"
     }
   ]
 }
